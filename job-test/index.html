@@ -521,6 +521,8 @@ function computeJob(){
   return tied[Math.floor(Math.random() * tied.length)];
 }
 
+let cachedShareFile = null;
+
 function showResult(){
   const job = computeJob();
   const r = jobs[job];
@@ -543,57 +545,71 @@ function showResult(){
   const m = jobs[r.mismatch];
   $('mismatchBox').innerHTML = "안 맞는 직업: <b>" + m.emoji + " " + r.mismatch + "</b> — " + r.mismatchReason;
   showScreen('screen-result');
+  preCaptureShareImage();
 }
 
 function restart(){ showScreen('screen-start'); }
+
+// 결과 화면에 들어오자마자 미리 캡처해서 준비해둠(공유 버튼 클릭 시 지연 없이 바로 공유창이 뜨도록,
+// 클릭과 공유 API 호출 사이 시간이 벌어지면 iOS 등에서 "사용자가 방금 눌렀다"는 권한이 만료돼
+// 공유창이 안 뜨고 조용히 다운로드로만 빠지는 문제가 있어서 이렇게 처리함)
+function preCaptureShareImage(){
+  cachedShareFile = null;
+  if (typeof html2canvas === 'undefined') return;
+  html2canvas($('captureArea'), { backgroundColor: "#faf4e3", scale: 2 }).then(canvas => {
+    canvas.toBlob(blob => {
+      if (blob){
+        cachedShareFile = new File([blob], "조선시대_직업_테스트_결과.png", { type: "image/png" });
+      }
+    }, "image/png");
+  }).catch(() => { /* 실패하면 클릭 시점에 재시도(아래 shareResult의 폴백 경로) */ });
+}
 
 function shareResult(btn){
   const title = $('resultTitle').textContent;
   const sub = $('resultSub').textContent;
   const text = "당신이 조선시대에서 살았다면, 당신의 직업은?\n[조선시대 직업 테스트]\n나의 결과는 '" + title + "' — " + sub + "\n너의 결과도 궁금하다면 테스트 해보세요.";
   const originalText = btn.textContent;
-  btn.textContent = "준비하는 중...";
-  btn.disabled = true;
   const done = () => { btn.textContent = originalText; btn.disabled = false; };
 
-  if (typeof html2canvas === 'undefined'){
-    // 캡처 라이브러리를 못 불러온 경우(네트워크 문제 등) 텍스트 공유로라도 진행
-    fallbackTextShare(text);
-    done();
+  // 1순위: 미리 캡처해둔 이미지가 있으면 지연 없이 바로 공유 (가장 안정적으로 카톡/인스타 공유창이 뜸)
+  if (cachedShareFile && navigator.canShare && navigator.canShare({ files: [cachedShareFile] })){
+    btn.disabled = true;
+    navigator.share({ files: [cachedShareFile], title: "조선시대 직업 테스트", text: text })
+      .catch(() => { downloadFile(cachedShareFile); })
+      .finally(done);
+    return;
+  }
+  // 2순위: 파일 공유는 안 되지만 텍스트/링크 공유는 되는 환경
+  if (navigator.share){
+    btn.disabled = true;
+    navigator.share({ title: "조선시대 직업 테스트", text: text, url: location.href })
+      .catch(() => { fallbackTextShare(text); })
+      .finally(done);
     return;
   }
 
+  // 3순위: 공유 API 자체가 없는 환경(PC, 구형 브라우저, 인앱 브라우저 등) — 그 자리에서 캡처해서 다운로드
+  btn.textContent = "준비하는 중...";
+  btn.disabled = true;
+  if (typeof html2canvas === 'undefined'){ fallbackTextShare(text); done(); return; }
   html2canvas($('captureArea'), { backgroundColor: "#faf4e3", scale: 2 }).then(canvas => {
     canvas.toBlob(blob => {
       if (!blob){ fallbackTextShare(text); done(); return; }
-      const file = new File([blob], "조선시대_직업_테스트_결과.png", { type: "image/png" });
-
-      if (navigator.canShare && navigator.canShare({ files: [file] })){
-        navigator.share({ files: [file], title: "조선시대 직업 테스트", text: text })
-          .catch(() => { downloadCanvas(canvas); })
-          .finally(done);
-        return;
-      }
-      if (navigator.share){
-        navigator.share({ title: "조선시대 직업 테스트", text: text, url: location.href })
-          .catch(() => { downloadCanvas(canvas); })
-          .finally(done);
-        return;
-      }
-      // 공유 API 미지원 환경(대부분 PC, 또는 file:// 로컬 미리보기): 이미지 다운로드로 대체
-      downloadCanvas(canvas);
+      downloadFile(new File([blob], "조선시대_직업_테스트_결과.png", { type: "image/png" }));
       done();
     }, "image/png");
   }).catch(() => { fallbackTextShare(text); done(); });
 }
 
-function downloadCanvas(canvas){
+function downloadFile(file){
+  const url = URL.createObjectURL(file);
   const link = document.createElement('a');
-  link.download = "조선시대_직업_테스트_결과.png";
-  link.href = canvas.toDataURL("image/png");
+  link.download = file.name;
+  link.href = url;
   link.click();
+  setTimeout(() => URL.revokeObjectURL(url), 2000);
   showToast("결과 이미지가 저장되었습니다");
-  // 클립보드는 https(보안 컨텍스트)에서만 동작 — 되면 보너스, 안 돼도 위 이미지 저장은 이미 완료된 상태
   if (navigator.clipboard && navigator.clipboard.writeText){
     navigator.clipboard.writeText(
       "당신이 조선시대에서 살았다면, 당신의 직업은?\n너의 결과도 궁금하다면 테스트 해보세요."
