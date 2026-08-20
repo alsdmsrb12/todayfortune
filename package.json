@@ -1,0 +1,6 @@
+{
+  "name": "todayfortune",
+  "version": "1.0.0",
+  "private": true,
+  "description": "오늘의 운세 - 이름과 생년월일로 오늘 하루의 운세를 보여주는 웹앱"
+}
