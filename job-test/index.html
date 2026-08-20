@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>조선시대 직업 테스트 | 나의 전생 직업은?</title>
+<meta name="description" content="조선시대 MBTI, 나의 전생 직업 테스트. 12가지 문장 공감도로 알아보는 임금부터 천민까지 16가지 조선시대 직업 유형 테스트. 할 때마다 다른 문장이 나옵니다.">
+<meta name="keywords" content="조선시대 직업 테스트, 조선시대 mbti, 나의 전생 직업, 성격 테스트, 유형 테스트">
+<meta property="og:title" content="조선시대 직업 테스트 | 나의 전생 직업은?">
+<meta property="og:description" content="조선시대 MBTI, 12가지 문장 공감도로 알아보는 나의 전생 직업. 할 때마다 다른 문장이 나와요.">
+<meta property="og:image" content="images/og-image.jpg">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Song+Myung&family=Noto+Serif+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+  :root{
+    --paper:#efe3c3;
+    --paper-card:#faf4e3;
+    --ink:#2b241d;
+    --ink-soft:#5c5346;
+    --jade:#4f6f52;
+    --jade-dark:#38502f;
+    --danchung:#a63a32;
+    --gold:#c89b3c;
+    --navy:#33506b;
+    --line: rgba(43,36,29,0.14);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(ellipse at top left, rgba(200,155,60,0.14), transparent 55%),
+      radial-gradient(ellipse at bottom right, rgba(79,111,82,0.14), transparent 55%),
+      var(--paper);
+    background-attachment:fixed;
+    color:var(--ink);
+    font-family:'Noto Serif KR', serif;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:24px 24px 56px;
+    position:relative;
+    overflow-x:hidden;
+  }
+  .page-wrap{ width:100%; max-width:460px; display:flex; flex-direction:column; align-items:center; }
+
+  /* ---- 배경 장식 ---- */
+  .bg-deco{ position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden; }
+  .bg-frame{
+    position:fixed; inset:14px; pointer-events:none; z-index:1;
+    border:1px solid rgba(166,58,50,0.35);
+  }
+  .bg-frame::before{
+    content:""; position:absolute; inset:6px; border:1px solid rgba(200,155,60,0.35);
+  }
+  .bg-moon{
+    position:fixed; top:-60px; right:-60px; width:260px; height:260px; border-radius:50%;
+    background:radial-gradient(circle at 35% 35%, rgba(200,155,60,0.35), rgba(200,155,60,0.05) 70%);
+    z-index:0;
+  }
+  .bg-branch{
+    position:fixed; top:20px; right:40px; width:180px; height:180px; z-index:0; opacity:0.5;
+  }
+  .bg-mountain{
+    position:fixed; left:0; right:0; bottom:0; height:130px; z-index:0; opacity:0.14;
+  }
+  .bg-lattice{
+    position:fixed; left:-40px; bottom:-40px; width:220px; height:220px; z-index:0; opacity:0.15;
+    background-image:
+      repeating-linear-gradient(45deg, var(--ink) 0 2px, transparent 2px 34px),
+      repeating-linear-gradient(-45deg, var(--ink) 0 2px, transparent 2px 34px);
+  }
+
+  .stage{ width:100%; max-width:460px; position:relative; z-index:2; }
+  .card{
+    background:var(--paper-card);
+    border:1px solid var(--line);
+    border-radius:2px;
+    box-shadow:0 1px 2px rgba(43,36,29,0.06), 0 16px 40px rgba(43,36,29,0.16);
+    padding:44px 30px 34px;
+    position:relative;
+    animation:fadeIn 0.45s ease both;
+  }
+  .card::before{
+    content:"";
+    position:absolute; inset:9px;
+    border:1px solid rgba(43,36,29,0.18);
+    pointer-events:none;
+  }
+  .card::after{
+    content:"";
+    position:absolute; top:0; left:0; right:0; height:5px;
+    background:repeating-linear-gradient(90deg,
+      var(--danchung) 0 12px, var(--gold) 12px 18px,
+      var(--jade) 18px 30px, var(--navy) 30px 34px, var(--paper-card) 34px 36px);
+  }
+  .corner{ position:absolute; width:16px; height:16px; z-index:3; }
+  .corner.tl{ top:-1px; left:-1px; border-top:2px solid var(--danchung); border-left:2px solid var(--danchung); }
+  .corner.tr{ top:-1px; right:-1px; border-top:2px solid var(--danchung); border-right:2px solid var(--danchung); }
+  .corner.bl{ bottom:-1px; left:-1px; border-bottom:2px solid var(--danchung); border-left:2px solid var(--danchung); }
+  .corner.br{ bottom:-1px; right:-1px; border-bottom:2px solid var(--danchung); border-right:2px solid var(--danchung); }
+
+  @keyframes fadeIn{ from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);} }
+  .screen{display:none;}
+  .screen.active{display:block;}
+
+  .eyebrow{ font-size:12px; letter-spacing:0.35em; color:var(--danchung); text-align:center; margin:10px 0 14px; }
+  h1.title{ font-family:'Song Myung', serif; font-size:30px; line-height:1.35; text-align:center; margin:0 0 10px; color:var(--ink); }
+  .subtitle{ text-align:center; color:var(--ink-soft); font-size:14px; margin:0 0 26px; line-height:1.7; }
+  .divider{ width:44px; height:1px; background:var(--gold); margin:0 auto 24px; }
+  .job-preview{ display:flex; justify-content:center; gap:7px 8px; flex-wrap:wrap; margin-bottom:28px; }
+  .job-chip{ font-size:11px; color:var(--jade-dark); border:1px solid rgba(79,111,82,0.35); padding:4px 9px; border-radius:2px; background:rgba(79,111,82,0.06); }
+  button.primary{
+    display:block; width:100%; padding:15px 20px;
+    background:var(--ink); color:var(--paper-card);
+    border:none; border-radius:2px; font-family:'Noto Serif KR', serif;
+    font-size:15px; letter-spacing:0.08em; cursor:pointer;
+    transition:background 0.2s ease, transform 0.15s ease;
+  }
+  button.primary:hover{background:var(--jade-dark);}
+  button.primary:active{transform:scale(0.98);}
+  button.ghost{
+    display:block; width:100%; margin-top:10px; padding:13px 20px;
+    background:transparent; color:var(--ink-soft);
+    border:1px solid var(--line); border-radius:2px;
+    font-family:'Noto Serif KR', serif; font-size:13px; cursor:pointer;
+  }
+
+  .progress-row{ display:flex; gap:4px; margin-bottom:24px; margin-top:6px; }
+  .progress-dot{ flex:1; height:3px; background:rgba(43,36,29,0.12); border-radius:2px; overflow:hidden; }
+  .progress-dot > span{ display:block; height:100%; width:0; background:var(--danchung); transition:width 0.3s ease; }
+  .q-count{ text-align:center; font-size:11px; letter-spacing:0.2em; color:var(--ink-soft); margin-bottom:8px; }
+  h2.question{ font-family:'Song Myung', serif; font-size:20px; line-height:1.5; text-align:center; margin:0 0 24px; color:var(--ink); }
+  .options{display:flex; flex-direction:column; gap:10px;}
+  .option{
+    text-align:left; padding:14px 16px; background:var(--paper);
+    border:1px solid var(--line); border-radius:2px; cursor:pointer;
+    font-family:'Noto Serif KR', serif; font-size:14.5px; color:var(--ink);
+    transition:border-color 0.15s ease, background 0.15s ease, transform 0.1s ease;
+  }
+  .option:hover{border-color:var(--jade); background:rgba(79,111,82,0.06);}
+  .option:active{transform:scale(0.99);}
+  .likert-option{ text-align:center; font-weight:500; letter-spacing:0.02em; }
+
+  .portrait{
+    width:150px; height:150px; margin:4px auto 16px;
+    border-radius:6px; overflow:hidden;
+    border:2px solid var(--danchung); box-shadow:0 4px 14px rgba(43,36,29,0.22);
+    position:relative;
+  }
+  .portrait img{
+    width:100%; height:100%; object-fit:cover; display:block;
+    filter:sepia(0.08) saturate(0.92) contrast(1.03);
+  }
+  .portrait::after{
+    content:""; position:absolute; inset:0; border:1px solid rgba(255,255,255,0.25); pointer-events:none;
+  }
+  .result-eyebrow{ text-align:center; font-size:12px; letter-spacing:0.3em; color:var(--ink-soft); margin-bottom:8px; }
+  .class-tag{
+    display:block; width:fit-content; margin:0 auto 10px; font-size:11px;
+    padding:3px 10px; border-radius:20px; background:rgba(166,58,50,0.10);
+    color:var(--danchung); border:1px solid rgba(166,58,50,0.3);
+  }
+  h1.result-title{ font-family:'Song Myung', serif; font-size:28px; text-align:center; margin:0 0 4px; color:var(--ink); }
+  .result-sub{ text-align:center; color:var(--jade-dark); font-size:14px; margin-bottom:20px; font-weight:600; }
+  .result-desc{ font-size:14.5px; line-height:1.85; color:var(--ink); margin-bottom:20px; text-align:center; }
+  .traits{ display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin-bottom:22px; }
+  .trait{ font-size:12px; padding:5px 11px; border-radius:20px; background:rgba(200,155,60,0.14); color:#8a6a20; border:1px solid rgba(200,155,60,0.35); }
+  .modern-box{ background:var(--paper); border-left:3px solid var(--jade); padding:12px 16px; font-size:13px; color:var(--ink-soft); line-height:1.7; margin-bottom:26px; }
+  .modern-box b{color:var(--jade-dark);}
+  .actions{display:flex; gap:8px;}
+  .actions button{flex:1;}
+  .toast{
+    position:fixed; bottom:28px; left:50%; transform:translateX(-50%);
+    background:var(--ink); color:var(--paper); padding:10px 18px; border-radius:4px;
+    font-size:13px; opacity:0; pointer-events:none; transition:opacity 0.25s ease; z-index:10;
+  }
+  .toast.show{opacity:1;}
+
+  .site-footer{
+    position:fixed; left:0; right:0; bottom:0; z-index:5;
+    text-align:center; padding:10px 0 12px;
+    background:linear-gradient(to top, rgba(239,227,195,0.95), rgba(239,227,195,0));
+  }
+  .site-footer a, .site-footer span{ font-size:10.5px; color:rgba(43,36,29,0.45); text-decoration:underline; }
+
+  .loading-wrap{ padding:40px 0; text-align:center; }
+  .loading-spinner{
+    font-size:40px; display:inline-block;
+    animation:spin 1.4s linear infinite;
+  }
+  @keyframes spin{ from{transform:rotate(0deg);} to{transform:rotate(360deg);} }
+  .loading-text{ margin-top:18px; font-size:14px; color:var(--ink-soft); letter-spacing:0.05em; }
+
+  .rarity-box{
+    text-align:center; font-size:12.5px; color:var(--jade-dark);
+    background:rgba(79,111,82,0.08); border:1px solid rgba(79,111,82,0.25);
+    border-radius:20px; padding:6px 14px; width:fit-content; margin:0 auto 18px;
+  }
+  .mismatch-box{
+    background:rgba(166,58,50,0.06); border:1px dashed rgba(166,58,50,0.35);
+    padding:12px 16px; font-size:12.5px; color:var(--ink-soft); line-height:1.7;
+    margin-bottom:20px; border-radius:2px;
+  }
+  .mismatch-box b{ color:var(--danchung); }
+</style>
+</head>
+<body>
+
+<div class="bg-deco">
+  <div class="bg-mountain">
+    <svg width="100%" height="130" viewBox="0 0 800 130" preserveAspectRatio="none">
+      <path d="M0 130 L80 60 L150 100 L230 40 L300 90 L380 20 L470 95 L560 55 L650 100 L730 50 L800 90 L800 130 Z" fill="#2b241d"/>
+    </svg>
+  </div>
+  <div class="bg-branch">
+    <svg width="180" height="180" viewBox="0 0 180 180">
+      <path d="M170 10 C130 40 100 70 60 130" stroke="#2b241d" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M120 45 C110 55 100 60 90 62" stroke="#2b241d" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <path d="M95 75 C85 82 78 84 68 84" stroke="#2b241d" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <circle cx="122" cy="43" r="4" fill="#a63a32"/>
+      <circle cx="98" cy="73" r="4" fill="#a63a32"/>
+      <circle cx="80" cy="95" r="4" fill="#a63a32"/>
+      <circle cx="66" cy="83" r="3" fill="#c89b3c"/>
+    </svg>
+  </div>
+  <div class="bg-lattice"></div>
+  <div class="bg-frame"></div>
+</div>
+
+<div class="page-wrap">
+<div class="stage">
+
+  <div class="card screen active" id="screen-start">
+    <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
+    <p class="eyebrow">朝 鮮 職 業 探 訪</p>
+    <h1 class="title">나의 조선시대 전생<br>직업 테스트</h1>
+    <p class="subtitle">당신이 조선시대에서 살았다면, 당신의 직업은?<br>12가지 문장에 얼마나 공감하는지 답하면<br>임금부터 천민까지 당신의 결과를 알려드립니다.<br><span style="opacity:0.7;">(할 때마다 다른 문장이 나와요)</span></p>
+    <div class="divider"></div>
+    <div class="job-preview">
+      <span class="job-chip">👑 임금</span><span class="job-chip">📜 정승</span>
+      <span class="job-chip">⚔️ 무관</span><span class="job-chip">✍️ 사관</span>
+      <span class="job-chip">🧘 도사</span><span class="job-chip">📚 훈장</span>
+      <span class="job-chip">🔭 천문관</span><span class="job-chip">🌍 역관</span>
+      <span class="job-chip">💊 의원</span><span class="job-chip">🌾 농부</span>
+      <span class="job-chip">🎨 화공</span><span class="job-chip">🔨 장인</span>
+      <span class="job-chip">💰 보부상</span><span class="job-chip">🎭 광대</span>
+      <span class="job-chip">💃 기녀</span><span class="job-chip">🔮 무당</span>
+    </div>
+    <button class="primary" onclick="startQuiz()">테스트 시작하기</button>
+  </div>
+
+  <div class="card screen" id="screen-quiz">
+    <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
+    <div class="progress-row" id="progressRow"></div>
+    <p class="q-count" id="qCount">1 / 12</p>
+    <h2 class="question" id="qText"></h2>
+    <div class="options" id="qOptions"></div>
+  </div>
+
+  <div class="card screen" id="screen-loading">
+    <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
+    <div class="loading-wrap">
+      <div class="loading-spinner">🪙</div>
+      <p class="loading-text" id="loadingText">사주를 살피는 중...</p>
+    </div>
+  </div>
+
+  <div class="card screen" id="screen-result">
+    <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
+    <div id="captureArea">
+    <div class="portrait"><img id="resultImg" src="" alt=""></div>
+    <p class="result-eyebrow">당신의 조선시대 직업은</p>
+    <span class="class-tag" id="resultClass"></span>
+    <h1 class="result-title" id="resultTitle"></h1>
+    <p class="result-sub" id="resultSub"></p>
+    <p class="result-desc" id="resultDesc"></p>
+    <div class="traits" id="resultTraits"></div>
+    <div class="rarity-box" id="rarityBox"></div>
+    <div class="modern-box" id="resultModern"></div>
+    <div class="mismatch-box" id="mismatchBox"></div>
+    </div>
+    <div class="actions">
+      <button class="ghost" onclick="restart()">다시 하기</button>
+      <button class="primary" id="shareBtn" onclick="shareResult(this)">공유하기</button>
+    </div>
+  </div>
+
+</div>
+<footer class="site-footer"><a href="privacy.html" target="_blank" rel="noopener">개인정보처리방침</a></footer>
+</div>
+<div class="toast" id="toast">결과가 복사되었습니다</div>
+
+<script>
+// 직업당 2개씩, 총 32개 문장 풀. 테스트할 때마다 16개 직업 중 12개를 랜덤으로 고르고,
+// 고른 직업마다 문장을 랜덤으로 하나씩 뽑아서 보여줌 -> 매번 다른 조합, 같은 사람이 여러 번 해도 안 질림.
+// 결과는 그 12문항 응답값 그대로 결정됨(직업별 점수 = 해당 문장에 준 점수, 1~5점). 랜덤 아님 — 단, 그 회차에 아예
+// 등장하지 않은 직업(16개 중 나머지 4개)은 이번엔 결과가 될 수 없음.
+const QUESTIONS_PER_TEST = 12;
+
+const statementPool = {
+  "임금": [
+    "나는 단톡방에서 공지 올리고 방향을 정하는 사람이다",
+    "나는 결정 장애가 없고, 웬만한 건 내가 정하고 책임진다"
+  ],
+  "정승": [
+    "나는 회의 때는 조용하지만, 속으로는 이미 계산을 다 끝내둔 사람이다",
+    "나는 나서는 것보다 뒤에서 판을 읽는 게 편하다"
+  ],
+  "무관": [
+    "나는 힘든 일이 생기면 일단 내가 먼저 나서는 편이다",
+    "나는 팀에 문제가 생기면 총대를 메는 편이다"
+  ],
+  "사관": [
+    "나는 지난 대화를 스크롤해서 팩트체크하는 걸 좋아한다",
+    "나는 기록, 정리, 정산 이런 건 나만 믿으라고 자신 있게 말할 수 있다"
+  ],
+  "도사": [
+    "나는 혼자 있는 시간에 진짜 에너지를 얻는 사람이다",
+    "나는 유행보다 본질이 궁금해서 혼자 파고드는 편이다"
+  ],
+  "훈장": [
+    "나는 뭔가 알게 되면 옆 사람한테 알려줘야 직성이 풀린다",
+    "나는 누가 모르는 걸 물어보면 신나서 설명해주는 편이다"
+  ],
+  "천문관": [
+    "나는 원리가 궁금하면 검색하다가 새벽까지 파고든다",
+    "나는 뭔가의 원리가 안 풀리면 잠을 설칠 정도로 궁금해한다"
+  ],
+  "역관": [
+    "나는 낯선 언어나 문화에 겁 없이 뛰어드는 편이다",
+    "나는 새로운 나라, 언어, 문화를 접하면 일단 뛰어들고 본다"
+  ],
+  "의원": [
+    "나는 힘들어하는 사람을 보면 상태부터 살피고 챙긴다",
+    "나는 주변 사람 컨디션을 은근히 잘 캐치하는 편이다"
+  ],
+  "농부": [
+    "나는 묵묵히 내 할 일을 하는 편이고, 화분이나 식물도 잘 돌본다",
+    "나는 꾸준하고 성실하다는 말을 자주 듣는다"
+  ],
+  "화공": [
+    "나는 말보다 그림이나 플레이리스트로 마음을 표현하는 게 편하다",
+    "나는 인테리어나 소품, 무드에 은근히 신경 쓰는 편이다"
+  ],
+  "장인": [
+    "나는 손으로 뭔가 조립하거나 만드는 데 몰입하는 편이다",
+    "나는 문제가 생기면 이론보다 직접 뜯어보고 고치는 편이다"
+  ],
+  "보부상": [
+    "나는 흥정하고 정산하는 걸 좋아하고, 발 빠르게 기회를 잡는다",
+    "나는 어디서든 사람 사귀고 이득 되는 걸 잘 챙기는 편이다"
+  ],
+  "광대": [
+    "나는 어디서든 분위기를 띄우고 사람들을 웃기는 역할을 한다",
+    "나는 진지한 자리도 웃음으로 풀어내는 재주가 있다"
+  ],
+  "기녀": [
+    "나는 사진 찍히면 인생샷이 나오고, 자리를 화사하게 만든다",
+    "나는 노래, 춤, 센스 있는 한마디로 분위기를 화사하게 만든다"
+  ],
+  "무당": [
+    "나는 촉이 좋고, 사람들이 나한테 고민 상담을 자주 한다",
+    "나는 보이지 않는 것도 왠지 먼저 느끼는 편이다"
+  ],
+};
+
+const likertLabels = ["매우 아니다", "아니다", "보통이다", "그렇다", "매우 그렇다"];
+
+
+const jobs = {
+  "임금": { img:"images/king.jpg", emoji:"👑", cls:"왕족", sub:"이미 K-직장인 최종 보스", rarity:2, mismatch:"무당", mismatchReason:"정해진 대로 vs 촉 가는 대로 — 계획표부터 안 맞음",
+    desc:"단톡방 만들면 공지 담당, 조모임 하면 방향 잡는 사람. 결정 장애 1도 없고, 책임도 내가 진다는 마인드. 은근히 다들 알아서 내 눈치 봄.",
+    traits:["통솔력","결단력","선넘는 리더십"], modern:"지금 태어났다면 <b>조직의 대표·정치 지도자</b>처럼, 방향을 정하고 책임지는 자리가 잘 어울렸을 사람입니다." },
+  "정승": { img:"images/minister.jpg", emoji:"📜", cls:"양반", sub:"말은 없지만 다 계산 끝남", rarity:4, mismatch:"광대", mismatchReason:"신중충 vs 텐션 만렙, 서로 템포가 안 맞음",
+    desc:"회의 때 조용한데 나중에 보면 제일 정확한 사람. 나서는 거 안 좋아하지만, 판이 어떻게 돌아가는지는 이미 다 파악하고 있습니다.",
+    traits:["전략적","통찰력","프로 관망러"], modern:"지금 태어났다면 <b>전략기획가·컨설턴트</b>처럼, 판을 읽고 설계하는 일이 잘 어울렸을 사람입니다." },
+  "무관": { img:"images/general.jpg", emoji:"⚔️", cls:"양반", sub:"총대 메는 게 특기", rarity:6, mismatch:"도사", mismatchReason:"일단 몸으로 vs 일단 명상부터, 속도가 정반대",
+    desc:"힘든 일, 궂은 일 생기면 먼저 나서는 스타일. 고민은 짧고 행동은 빠릅니다. 팀에 하나쯤 있으면 든든한, 프로 해결사 포지션.",
+    traits:["실행력","책임감","행동파"], modern:"지금 태어났다면 <b>소방관·군 지휘관·스타트업 대표</b>처럼, 몸으로 부딪히며 이끄는 자리가 잘 어울렸을 사람입니다." },
+  "사관": { img:"images/historian.jpg", emoji:"✍️", cls:"중인", sub:"단톡방 팩트체크 담당", rarity:6, mismatch:"기녀", mismatchReason:"팩트체크 vs 감성 텐션, 대화가 안 통함",
+    desc:"\"저번에 그거 아니었는데?\" 스크롤해서 증거 찾아오는 사람. 회의록·정산·기록은 나만 믿으면 됩니다. 디테일에 진심.",
+    traits:["성실함","정확성","기록덕후"], modern:"지금 태어났다면 <b>회계사·감사·아카이비스트</b>처럼, 정확하게 남기고 검증하는 일이 잘 어울렸을 사람입니다." },
+  "도사": { img:"images/sage.jpg", emoji:"🧘", cls:"양반(출가)", sub:"유튜브 알고리즘이 명상 채널로 도배", rarity:5, mismatch:"무관", mismatchReason:"일단 명상부터 vs 일단 몸으로, 속도가 정반대",
+    desc:"혼자 있는 시간에서 진짜 힘을 얻는 사람. 유행보다 본질이 궁금하고, 남들 다 하는 것도 \"이게 왜 좋은 건데?\"부터 파고듭니다.",
+    traits:["통찰력","자기만의 기준","이상주의"], modern:"지금 태어났다면 <b>상담가·철학 연구자</b>처럼, 깊이 사유하는 일이 잘 어울렸을 사람입니다." },
+  "훈장": { img:"images/teacher.jpg", emoji:"📚", cls:"양반/중인", sub:"설명충 그 자체", rarity:7, mismatch:"보부상", mismatchReason:"가르치려는 사람 vs 흥정하려는 사람, 대화 목적이 다름",
+    desc:"뭘 알게 되면 옆 사람한테 알려줘야 직성이 풀리는 타입. \"이거 몰랐지?\"가 입버릇. 은근히 다들 모르는 거 생기면 나부터 찾습니다.",
+    traits:["영향력","배려심","오지랖 지식인"], modern:"지금 태어났다면 <b>교사·코치·멘토</b>처럼, 사람을 키우는 일이 잘 어울렸을 사람입니다." },
+  "천문관": { img:"images/astronomer.jpg", emoji:"🔭", cls:"중인", sub:"우주 다큐 보다가 밤샘", rarity:5, mismatch:"화공", mismatchReason:"논리로 설명 vs 느낌적인 느낌, 서로 설득이 안 됨",
+    desc:"원리가 궁금해서 검색하다 보면 새벽 3시. 겉모습보다 \"어떻게 이게 되는 거지?\"가 더 궁금한 리서치형 인간입니다.",
+    traits:["분석력","호기심","디테일 파괴자"], modern:"지금 태어났다면 <b>연구원·데이터 과학자</b>처럼, 원리를 파고드는 일이 잘 어울렸을 사람입니다." },
+  "역관": { img:"images/translator.jpg", emoji:"🌍", cls:"중인", sub:"해외 브이로그 알고리즘 정복자", rarity:6, mismatch:"농부", mismatchReason:"떠돌고 싶은 사람 vs 정착하고 싶은 사람",
+    desc:"낯선 것에 겁이 없고, 새로운 언어나 문화가 있으면 일단 눌러보고 싶어합니다. 어디 가서도 금방 적응하는 만능 소통러.",
+    traits:["순발력","호기심","글로벌 마인드"], modern:"지금 태어났다면 <b>외교관·통번역가</b>처럼, 서로 다른 세계를 잇는 일이 잘 어울렸을 사람입니다." },
+  "의원": { img:"images/physician.jpg", emoji:"💊", cls:"중인", sub:"\"밥은 먹었어?\"가 인사말", rarity:7, mismatch:"장인", mismatchReason:"다 챙겨주려는 사람 vs 혼자 다 해내는 사람, 자꾸 부딪힘",
+    desc:"누가 힘들다고 하면 해결책보다 상태부터 살피는 사람. 조용하지만 티 안 나게 세심하게 챙깁니다. 친구들의 비상연락망.",
+    traits:["배려심","헌신","은근한 관찰력"], modern:"지금 태어났다면 <b>의료인·상담사·사회복지사</b>처럼, 사람을 세심히 돌보는 일이 잘 어울렸을 사람입니다." },
+  "농부": { img:"images/farmer.jpg", emoji:"🌾", cls:"상민", sub:"화분 살리기 성공률 100%", rarity:11, mismatch:"역관", mismatchReason:"정착하고 싶은 사람 vs 떠돌고 싶은 사람",
+    desc:"묵묵히 자기 할 일 하는 스타일. 화려하진 않아도 없으면 티 나는 존재감. 밥 챙겨주고 텃밭 가꾸는 데서 힐링을 느낍니다.",
+    traits:["성실함","협동심","은근 힐링 요정"], modern:"지금 태어났다면 <b>자영업자·커뮤니티 매니저</b>처럼, 꾸준함으로 신뢰를 쌓는 일이 잘 어울렸을 사람입니다." },
+  "화공": { img:"images/painter.jpg", emoji:"🎨", cls:"상민", sub:"위로는 플레이리스트로 함", rarity:7, mismatch:"천문관", mismatchReason:"느낌적인 느낌 vs 논리로 설명, 서로 설득이 안 됨",
+    desc:"말보다 감성으로 표현하는 게 편한 사람. 인테리어, 소품, 무드에 진심이고, 힘든 친구한테 짤이나 노래 하나로 마음을 전합니다.",
+    traits:["감성적","섬세함","무드 메이커"], modern:"지금 태어났다면 <b>디자이너·일러스트레이터</b>처럼, 섬세한 감각을 표현하는 일이 잘 어울렸을 사람입니다." },
+  "장인": { img:"images/artisan.jpg", emoji:"🔨", cls:"상민", sub:"레고·조립 실패란 없음", rarity:8, mismatch:"의원", mismatchReason:"혼자 다 해내는 사람 vs 다 챙겨주려는 사람, 자꾸 부딪힘",
+    desc:"말없이 몰입해서 결국 완성해내는 사람. 손으로 만지는 게 편하고, 문제가 생기면 이론보다 실제로 뜯어보고 고칩니다.",
+    traits:["손재주","문제해결력","묵묵한 실행러"], modern:"지금 태어났다면 <b>엔지니어·개발자</b>처럼, 직접 만들고 완성하는 일이 잘 어울렸을 사람입니다." },
+  "보부상": { img:"images/merchant.jpg", emoji:"💰", cls:"상민", sub:"MT 총무는 무조건 나", rarity:8, mismatch:"훈장", mismatchReason:"흥정하려는 사람 vs 가르치려는 사람, 대화 목적이 다름",
+    desc:"발 빠르게 움직이며 기회를 잡는 타입. 정산, 흥정, 딜은 내가 최고. 어디서든 사람 사귀고 이득 되는 거 하나쯤은 챙깁니다.",
+    traits:["순발력","사교성","현실 감각 만렙"], modern:"지금 태어났다면 <b>세일즈·창업가</b>처럼, 현장에서 기회를 잡는 일이 잘 어울렸을 사람입니다." },
+  "광대": { img:"images/entertainer.jpg", emoji:"🎭", cls:"천민", sub:"단톡방 분위기 메이커", rarity:7, mismatch:"정승", mismatchReason:"텐션 만렙 vs 신중충, 서로 템포가 안 맞음",
+    desc:"어디서든 텐션을 최고치로 끌어올리는 사람. 진지한 자리도 웃음으로 풀어내는 재주가 있고, 사람들 속에서 자연스럽게 빛납니다.",
+    traits:["열정","표현력","텐션 담당"], modern:"지금 태어났다면 <b>콘텐츠 크리에이터·공연 예술가</b>처럼, 사람들을 즐겁게 하는 일이 잘 어울렸을 사람입니다." },
+  "기녀": { img:"images/courtesan.jpg", emoji:"💃", cls:"천민", sub:"사진 찍히면 무조건 인생샷", rarity:6, mismatch:"사관", mismatchReason:"감성 텐션 vs 팩트체크, 대화가 안 통함",
+    desc:"자리를 화사하게 만드는 타고난 재주가 있는 사람. 노래, 춤, 센스 있는 한마디까지 다재다능하고, 어딜 가나 시선을 끕니다.",
+    traits:["끼","사교성","분위기 장악력"], modern:"지금 태어났다면 <b>엔터테이너·방송인</b>처럼, 분위기를 이끄는 일이 잘 어울렸을 사람입니다." },
+  "무당": { img:"images/shaman.jpg", emoji:"🔮", cls:"천민", sub:"친구들의 고민 상담 창구", rarity:5, mismatch:"임금", mismatchReason:"촉 가는 대로 vs 정해진 대로 — 계획표부터 안 맞음",
+    desc:"촉이 좋고 사람 마음을 잘 읽는 사람. 새벽 감성 토크 시작하면 다들 눈물바다. 보이지 않는 것도 왠지 먼저 느낍니다.",
+    traits:["직관력","공감","신비로운 촉"], modern:"지금 태어났다면 <b>심리상담가·예술가</b>처럼, 사람 마음 깊은 곳을 다루는 일이 잘 어울렸을 사람입니다." },
+};
+
+let current = 0;
+let scores = {};
+let activeStatements = [];
+
+function $(id){ return document.getElementById(id); }
+function showScreen(id){ document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); $(id).classList.add('active'); }
+
+function shuffleArray(arr){
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function startQuiz(){
+  current = 0;
+  scores = {};
+  Object.keys(jobs).forEach(j => scores[j] = 0);
+  // 16개 직업 중 12개를 랜덤으로 고르고, 고른 직업마다 문장 풀에서 하나씩 랜덤으로 뽑음
+  const chosenJobs = shuffleArray(Object.keys(statementPool)).slice(0, QUESTIONS_PER_TEST);
+  activeStatements = shuffleArray(chosenJobs.map(job => {
+    const variants = statementPool[job];
+    const t = variants[Math.floor(Math.random() * variants.length)];
+    return { job, t };
+  }));
+  buildProgress();
+  showScreen('screen-quiz');
+  renderQuestion();
+}
+
+function buildProgress(){
+  const row = $('progressRow');
+  row.innerHTML = '';
+  activeStatements.forEach(() => {
+    const dot = document.createElement('div');
+    dot.className = 'progress-dot';
+    dot.innerHTML = '<span></span>';
+    row.appendChild(dot);
+  });
+}
+
+function updateProgress(){
+  const dots = document.querySelectorAll('.progress-dot > span');
+  dots.forEach((d, i) => { d.style.width = i <= current ? '100%' : '0%'; });
+}
+
+function renderQuestion(){
+  const item = activeStatements[current];
+  $('qCount').textContent = (current+1) + ' / ' + activeStatements.length;
+  $('qText').textContent = item.t;
+  updateProgress();
+  const box = $('qOptions');
+  box.innerHTML = '';
+  likertLabels.forEach((label, idx) => {
+    const value = idx + 1; // 1~5
+    const btn = document.createElement('button');
+    btn.className = 'option likert-option';
+    btn.textContent = label;
+    btn.onclick = () => selectOption(item.job, value);
+    box.appendChild(btn);
+  });
+}
+
+function selectOption(job, value){
+  scores[job] = (scores[job] || 0) + value;
+  current++;
+  if (current < activeStatements.length){ renderQuestion(); }
+  else { runLoading(); }
+}
+
+const loadingPhrases = ["사주를 살피는 중...", "운명을 점치는 중...", "직업을 정하는 중..."];
+
+function runLoading(){
+  showScreen('screen-loading');
+  let i = 0;
+  $('loadingText').textContent = loadingPhrases[0];
+  const interval = setInterval(() => {
+    i++;
+    if (i < loadingPhrases.length){ $('loadingText').textContent = loadingPhrases[i]; }
+  }, 600);
+  setTimeout(() => { clearInterval(interval); showResult(); }, 2000);
+}
+
+function computeJob(){
+  let bestScore = -1;
+  Object.keys(jobs).forEach(job => { if (scores[job] > bestScore) bestScore = scores[job]; });
+  const tied = Object.keys(jobs).filter(job => scores[job] === bestScore);
+  return tied[Math.floor(Math.random() * tied.length)];
+}
+
+function showResult(){
+  const job = computeJob();
+  const r = jobs[job];
+  $('resultImg').src = r.img;
+  $('resultImg').alt = job;
+  $('resultClass').textContent = r.cls;
+  $('resultTitle').textContent = r.emoji + ' ' + job;
+  $('resultSub').textContent = r.sub;
+  $('resultDesc').textContent = r.desc;
+  $('resultModern').innerHTML = r.modern;
+  const traitsBox = $('resultTraits');
+  traitsBox.innerHTML = '';
+  r.traits.forEach(t => {
+    const span = document.createElement('span');
+    span.className = 'trait';
+    span.textContent = t;
+    traitsBox.appendChild(span);
+  });
+  $('rarityBox').textContent = "이 직업이 나올 확률 " + r.rarity + "% · 낮을수록 레어템";
+  const m = jobs[r.mismatch];
+  $('mismatchBox').innerHTML = "안 맞는 직업: <b>" + m.emoji + " " + r.mismatch + "</b> — " + r.mismatchReason;
+  showScreen('screen-result');
+}
+
+function restart(){ showScreen('screen-start'); }
+
+function shareResult(btn){
+  const title = $('resultTitle').textContent;
+  const sub = $('resultSub').textContent;
+  const text = "당신이 조선시대에서 살았다면, 당신의 직업은?\n[조선시대 직업 테스트]\n나의 결과는 '" + title + "' — " + sub + "\n너의 결과도 궁금하다면 테스트 해보세요.";
+  const originalText = btn.textContent;
+  btn.textContent = "준비하는 중...";
+  btn.disabled = true;
+  const done = () => { btn.textContent = originalText; btn.disabled = false; };
+
+  if (typeof html2canvas === 'undefined'){
+    // 캡처 라이브러리를 못 불러온 경우(네트워크 문제 등) 텍스트 공유로라도 진행
+    fallbackTextShare(text);
+    done();
+    return;
+  }
+
+  html2canvas($('captureArea'), { backgroundColor: "#faf4e3", scale: 2 }).then(canvas => {
+    canvas.toBlob(blob => {
+      if (!blob){ fallbackTextShare(text); done(); return; }
+      const file = new File([blob], "조선시대_직업_테스트_결과.png", { type: "image/png" });
+
+      if (navigator.canShare && navigator.canShare({ files: [file] })){
+        navigator.share({ files: [file], title: "조선시대 직업 테스트", text: text })
+          .catch(() => { downloadCanvas(canvas); })
+          .finally(done);
+        return;
+      }
+      if (navigator.share){
+        navigator.share({ title: "조선시대 직업 테스트", text: text, url: location.href })
+          .catch(() => { downloadCanvas(canvas); })
+          .finally(done);
+        return;
+      }
+      // 공유 API 미지원 환경(대부분 PC, 또는 file:// 로컬 미리보기): 이미지 다운로드로 대체
+      downloadCanvas(canvas);
+      done();
+    }, "image/png");
+  }).catch(() => { fallbackTextShare(text); done(); });
+}
+
+function downloadCanvas(canvas){
+  const link = document.createElement('a');
+  link.download = "조선시대_직업_테스트_결과.png";
+  link.href = canvas.toDataURL("image/png");
+  link.click();
+  showToast("결과 이미지가 저장되었습니다");
+  // 클립보드는 https(보안 컨텍스트)에서만 동작 — 되면 보너스, 안 돼도 위 이미지 저장은 이미 완료된 상태
+  if (navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(
+      "당신이 조선시대에서 살았다면, 당신의 직업은?\n너의 결과도 궁금하다면 테스트 해보세요."
+    ).catch(() => {});
+  }
+}
+
+function fallbackTextShare(text){
+  if (navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(() => {
+      showToast("결과가 복사되었습니다");
+    }).catch(() => { window.prompt("아래 문구를 복사해서 공유해보세요", text); });
+  } else {
+    window.prompt("아래 문구를 복사해서 공유해보세요", text);
+  }
+}
+
+function showToast(msg){
+  const toast = $('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2200);
+}
+</script>
+</body>
+</html>
