@@ -568,7 +568,7 @@ function preCaptureShareImage(){
 function shareResult(btn){
   const title = $('resultTitle').textContent;
   const sub = $('resultSub').textContent;
-  const text = "당신이 조선시대에서 살았다면, 당신의 직업은?\n[조선시대 직업 테스트]\n나의 결과는 '" + title + "' — " + sub + "\n너의 결과도 궁금하다면 테스트 해보세요."\nhttps://myfortunetoday.com/job-test/";
+  const text = "당신이 조선시대에서 살았다면, 당신의 직업은?\n[조선시대 직업 테스트]\n나의 결과는 '" + title + "' — " + sub + "\n당신의 결과도 궁금하다면 테스트 해보세요.\nhttps://myfortunetoday.com/job-test/";
   const originalText = btn.textContent;
   const done = () => { btn.textContent = originalText; btn.disabled = false; };
 
