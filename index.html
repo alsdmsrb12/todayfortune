@@ -2062,13 +2062,17 @@
       console.warn('[결제] 포트원 키가 설정되지 않아 TEST 모드로 무료 통과합니다.');
       return true;
     }
-    try{ sessionStorage.setItem('pendingDrawType', drawType); }catch(e){ /* ignore */ }
+    const paymentId = generatePaymentId();
+    try{
+      sessionStorage.setItem('pendingDrawType', drawType);
+      localStorage.setItem('pendingPaymentId', paymentId); // 모바일 리다이렉션 복귀 시 새로고침으로 결과를 놓쳐도 우리 결제였는지 확인하기 위함
+    }catch(e){ /* ignore */ }
     let response;
     try{
       response = await PortOne.requestPayment({
         storeId: PORTONE_STORE_ID,
         channelKey: PORTONE_CHANNEL_KEY,
-        paymentId: generatePaymentId(),
+        paymentId,
         orderName,
         totalAmount: DRAW_PRICE,
         currency: 'CURRENCY_KRW',
@@ -2096,10 +2100,36 @@
 
     history.replaceState(null, '', location.pathname); // 새로고침해도 중복 처리 안 되도록 URL 정리
     const drawType = sessionStorage.getItem('pendingDrawType');
-    try{ sessionStorage.removeItem('pendingDrawType'); }catch(e){ /* ignore */ }
+    let pendingPaymentId = null;
+    try{
+      pendingPaymentId = localStorage.getItem('pendingPaymentId');
+      sessionStorage.removeItem('pendingDrawType');
+      localStorage.removeItem('pendingPaymentId');
+    }catch(e){ /* ignore */ }
 
-    const ok = await verifyPaymentOnServer(paymentId);
-    if(!ok) return; // 실패 사유는 verifyPaymentOnServer가 이미 alert로 안내함
+    let ok = false;
+    try{
+      const verifyRes = await fetch('/api/verify-payment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ paymentId })
+      });
+      const verifyData = await verifyRes.json();
+      if(verifyRes.ok && verifyData.ok){
+        ok = true;
+      }else if(verifyRes.status === 409 && pendingPaymentId === paymentId){
+        // 이 기기에서 우리가 직접 시작한 결제인데 이미 처리됨으로 응답 -> 모바일 리다이렉션 중 새로고침 등으로
+        // 클라이언트가 첫 결과 처리를 놓쳤을 뿐, 실제로는 우리가 결제한 게 맞으므로 크레딧을 지급한다
+        ok = true;
+      }else{
+        alert(verifyData.error || '결제 확인에 실패했습니다. 고객센터로 문의해 주세요.');
+        return;
+      }
+    }catch(e){
+      alert('결제 확인 중 오류가 발생했습니다.');
+      return;
+    }
+    if(!ok) return;
 
     setFreeCapsuleCount(getFreeCapsuleCount() + 1);
     updateFreeCapsuleUI();
