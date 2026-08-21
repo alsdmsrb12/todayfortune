@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://myfortunetoday.com/sitemap.xml
+Sitemap: https://www.myfortunetoday.com/sitemap.xml
