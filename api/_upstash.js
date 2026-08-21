@@ -36,3 +36,11 @@ export async function redisIncrWithExpire(key, ttlSeconds) {
   }
   return count; // Upstash 미설정 시 null 반환 -> 호출부에서 제한 미적용으로 처리
 }
+
+// SET ... NX를 이용한 원자적 1회성 선점 (get-then-set은 두 요청이 동시에 들어오면 둘 다 통과하는 race condition이 있어서 사용하지 않음)
+// 반환값: 'claimed' (이번 호출이 최초 선점 성공) | 'already-claimed' (이미 선점됨) | 'not-configured' (Upstash 미설정, 호출부에서 체크 자체를 건너뛰어야 함)
+export async function claimOnce(key, ttlSeconds) {
+  if (!BASE || !TOKEN) return 'not-configured';
+  const result = await call(`/set/${encodeURIComponent(key)}/1?EX=${ttlSeconds}&NX=true`);
+  return result === 'OK' ? 'claimed' : 'already-claimed';
+}

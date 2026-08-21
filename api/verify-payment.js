@@ -6,7 +6,7 @@
 // 배포 시 Vercel 프로젝트 설정 > Environment Variables 에 PORTONE_API_SECRET 을 등록해야 합니다.
 // (포트원 관리자콘솔 admin.portone.io > API Keys(V2) 메뉴에서 확인)
 
-import { redisGet, redisSetEx } from './_upstash.js';
+import { claimOnce } from './_upstash.js';
 
 const DRAW_PRICE = 500;
 const USED_PAYMENT_TTL_SECONDS = 60 * 60 * 24; // 하루면 재사용 방지 목적으로 충분
@@ -30,12 +30,6 @@ export default async function handler(req, res) {
   }
 
   try {
-    const alreadyUsed = await redisGet(`payment:used:${paymentId}`);
-    if (alreadyUsed) {
-      res.status(409).json({ error: '이미 처리된 결제입니다.' });
-      return;
-    }
-
     const portoneRes = await fetch(`https://api.portone.io/payments/${encodeURIComponent(paymentId)}`, {
       headers: { Authorization: `PortOne ${secret}` }
     });
@@ -57,8 +51,13 @@ export default async function handler(req, res) {
       return;
     }
 
-    // Upstash 미설정 시(null 반환) 재사용 방지 기록은 건너뛰지만, 결제 자체 검증은 통과시킴
-    await redisSetEx(`payment:used:${paymentId}`, '1', USED_PAYMENT_TTL_SECONDS);
+    // 결제 검증을 통과한 마지막 순간에 원자적으로 선점 — 동일 paymentId로 동시에 들어온 요청 중 단 하나만 통과시킨다
+    const claim = await claimOnce(`payment:used:${paymentId}`, USED_PAYMENT_TTL_SECONDS);
+    if (claim === 'already-claimed') {
+      res.status(409).json({ error: '이미 처리된 결제입니다.' });
+      return;
+    }
+    // claim === 'not-configured'인 경우 Upstash 미설정 상태 — 재사용 방지는 못 하지만 결제 자체는 유효하므로 통과시킴
 
     res.status(200).json({ ok: true });
   } catch (err) {
