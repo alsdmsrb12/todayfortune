@@ -863,6 +863,28 @@
     100%{ transform: scale(1.08) rotateY(0); opacity:0; }
   }
 
+  .cross-promo{
+    display:flex; align-items:center; justify-content:center; gap:10px;
+    max-width: 420px; margin: 40px auto 0;
+    padding: 14px 18px;
+    border: 1px solid var(--hanji-edge);
+    border-radius: 14px;
+    background: rgba(216,201,163,0.18);
+    text-decoration:none;
+    color: var(--indigo);
+    font-family:'Noto Serif KR', serif;
+    transition: box-shadow .15s ease, transform .15s ease;
+  }
+  .cross-promo:hover{ box-shadow: 0 4px 14px rgba(0,0,0,0.08); transform: translateY(-1px); }
+  .cross-promo-badge{
+    flex-shrink:0;
+    font-size:11px; font-weight:700; letter-spacing:0.05em;
+    padding: 4px 9px; border-radius:999px;
+    background: var(--indigo); color:#fff;
+    white-space:nowrap;
+  }
+  .cross-promo-text{ font-size:13.5px; line-height:1.4; }
+
   footer{
     text-align:center;
     margin-top:56px;
@@ -1275,14 +1297,17 @@
 
   </div><!-- /panelTarot -->
 
+  <a class="cross-promo" href="/job-test/">
+    <span class="cross-promo-badge">직업 테스트</span>
+    <span class="cross-promo-text">당신이 조선시대에 살았다면? 나의 전생 직업 알아보기 →</span>
+  </a>
+
   <footer>
     새벽마다 새로운 기운이 흐릅니다
     <div class="footer-links">
       <button class="footer-link" id="openPrivacyBtn" type="button">개인정보처리방침</button>
       <span class="footer-dot">·</span>
       <button class="footer-link" id="openTermsBtn" type="button">이용약관</button>
-      <span class="footer-dot">·</span>
-      <a class="footer-link" href="/job-test/">조선시대 직업 테스트</a>
     </div>
     <div class="footer-biz">
       상호: 오늘의운세 · 대표: 민은규<br/>
@@ -2008,37 +2033,13 @@
     return (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : ('p_' + Date.now() + '_' + Math.random().toString(36).slice(2));
   }
 
-  // 무료 뽑기가 없을 때 호출: 결제 성공 + 서버 검증까지 통과해야 true를 반환
-  async function requestDrawPayment(orderName){
-    // 포트원 키가 아직 REPLACE_ 플레이스홀더인 경우에만 결제 없이 통과 (현재는 실키가 들어가 있어 해당 없음)
-    if(PORTONE_STORE_ID.startsWith('REPLACE_') || PORTONE_CHANNEL_KEY.startsWith('REPLACE_')){
-      console.warn('[결제] 포트원 키가 설정되지 않아 TEST 모드로 무료 통과합니다.');
-      return true;
-    }
-    let response;
-    try{
-      response = await PortOne.requestPayment({
-        storeId: PORTONE_STORE_ID,
-        channelKey: PORTONE_CHANNEL_KEY,
-        paymentId: generatePaymentId(),
-        orderName,
-        totalAmount: DRAW_PRICE,
-        currency: 'CURRENCY_KRW',
-        payMethod: 'CARD'
-      });
-    }catch(e){
-      alert('결제 중 오류가 발생했습니다. 다시 시도해 주세요.');
-      return false;
-    }
-    if(!response || response.code){
-      if(response && response.message) alert(response.message);
-      return false;
-    }
+  // 서버에 paymentId를 보내 실제 결제 완료 여부를 검증 (성공 시 true)
+  async function verifyPaymentOnServer(paymentId){
     try{
       const verifyRes = await fetch('/api/verify-payment', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ paymentId: response.paymentId })
+        body: JSON.stringify({ paymentId })
       });
       const verifyData = await verifyRes.json();
       if(!verifyRes.ok || !verifyData.ok){
@@ -2052,6 +2053,66 @@
     }
   }
 
+  // 무료 뽑기가 없을 때 호출: 결제 성공 + 서버 검증까지 통과해야 true를 반환
+  // 모바일에서는 결제창이 REDIRECTION 방식(전체 화면 이동)이라 이 함수가 반환되지 않고 페이지가 이동한다.
+  // 결제 후 돌아오면 handlePaymentRedirectReturn()이 이어서 처리하므로, 어떤 뽑기였는지 sessionStorage에 남겨둔다.
+  async function requestDrawPayment(orderName, drawType){
+    // 포트원 키가 아직 REPLACE_ 플레이스홀더인 경우에만 결제 없이 통과 (현재는 실키가 들어가 있어 해당 없음)
+    if(PORTONE_STORE_ID.startsWith('REPLACE_') || PORTONE_CHANNEL_KEY.startsWith('REPLACE_')){
+      console.warn('[결제] 포트원 키가 설정되지 않아 TEST 모드로 무료 통과합니다.');
+      return true;
+    }
+    try{ sessionStorage.setItem('pendingDrawType', drawType); }catch(e){ /* ignore */ }
+    let response;
+    try{
+      response = await PortOne.requestPayment({
+        storeId: PORTONE_STORE_ID,
+        channelKey: PORTONE_CHANNEL_KEY,
+        paymentId: generatePaymentId(),
+        orderName,
+        totalAmount: DRAW_PRICE,
+        currency: 'CURRENCY_KRW',
+        payMethod: 'CARD',
+        windowType: { pc: 'IFRAME', mobile: 'REDIRECTION' }, // 모바일은 고정 크기 iframe이 화면보다 커서 불편함 -> 전체화면 리다이렉션
+        redirectUrl: location.origin + location.pathname
+      });
+    }catch(e){
+      alert('결제 중 오류가 발생했습니다. 다시 시도해 주세요.');
+      return false;
+    }
+    if(!response || response.code){
+      if(response && response.message) alert(response.message);
+      return false;
+    }
+    return verifyPaymentOnServer(response.paymentId);
+  }
+
+  // ---------- 모바일 리다이렉션 결제 후 복귀 처리 ----------
+  // PortOne이 결제 후 ?paymentId=... 를 붙여 같은 페이지로 되돌려보낸다 (성공/실패 여부는 서버 검증으로 최종 판단).
+  async function handlePaymentRedirectReturn(){
+    const params = new URLSearchParams(location.search);
+    const paymentId = params.get('paymentId');
+    if(!paymentId) return;
+
+    history.replaceState(null, '', location.pathname); // 새로고침해도 중복 처리 안 되도록 URL 정리
+    const drawType = sessionStorage.getItem('pendingDrawType');
+    try{ sessionStorage.removeItem('pendingDrawType'); }catch(e){ /* ignore */ }
+
+    const ok = await verifyPaymentOnServer(paymentId);
+    if(!ok) return; // 실패 사유는 verifyPaymentOnServer가 이미 alert로 안내함
+
+    setFreeCapsuleCount(getFreeCapsuleCount() + 1);
+    updateFreeCapsuleUI();
+
+    if(drawType === 'tarot'){
+      switchTab('tarot');
+      alert('결제가 완료됐어요! "타로 보기" 버튼을 눌러 결과를 확인하세요.');
+    }else{
+      switchTab('capsule');
+      alert('결제가 완료됐어요! "캡슐 뽑기" 버튼을 눌러 결과를 확인하세요.');
+    }
+  }
+
   async function drawCapsule(){
     if(capsuleDrawBtn.disabled) return; // 애니메이션 진행 중 중복 클릭(연타) 방지
     const usedFreeDraw = getFreeCapsuleCount() > 0; // 이번 뽑기가 무료 뽑기 차감분인지 기록
@@ -2059,7 +2120,7 @@
     if(!usedFreeDraw){
       capsuleDrawBtn.disabled = true;
       capsuleRetryBtn.disabled = true;
-      const paid = await requestDrawPayment('캡슐 뽑기');
+      const paid = await requestDrawPayment('캡슐 뽑기', 'capsule');
       if(!paid){
         capsuleDrawBtn.disabled = false;
         capsuleRetryBtn.disabled = false;
@@ -2422,7 +2483,7 @@
 
     if(!usedFreeDraw){
       tarotStartBtn.disabled = true;
-      const paid = await requestDrawPayment('타로카드 보기');
+      const paid = await requestDrawPayment('타로카드 보기', 'tarot');
       tarotStartBtn.disabled = false;
       if(!paid) return;
     }
@@ -2520,6 +2581,8 @@
       btn.querySelector('span').textContent = prevText;
     }
   });
+
+  handlePaymentRedirectReturn();
 </script>
 
 <!-- Vercel Web Analytics: Vercel 프로젝트 대시보드 > Analytics 탭에서 활성화해야 데이터가 쌓입니다 -->
