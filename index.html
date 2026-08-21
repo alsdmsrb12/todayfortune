@@ -2194,6 +2194,10 @@
             capsuleSlipText.textContent = pick.text;
             capsuleSlipKeyword.textContent = pick.keyword;
             capsuleResult.hidden = false;
+            try{
+              localStorage.setItem('capsuleResultDate', todayStr());
+              localStorage.setItem('capsuleResultData', JSON.stringify(pick));
+            }catch(e){ /* ignore */ }
             capsuleDrawBtn.disabled = false;
             capsuleRetryBtn.disabled = false;
             capsuleBall.classList.remove('popped');
@@ -2551,6 +2555,10 @@
       document.getElementById('tarotCardText').textContent = card.text;
       document.getElementById('tarotCardKeyword').textContent = card.keyword;
       tarotResult.hidden = false;
+      try{
+        localStorage.setItem('tarotResultDate', todayStr());
+        localStorage.setItem('tarotResultData', JSON.stringify(card));
+      }catch(e){ /* ignore */ }
     }, 480);
   }
 
@@ -2612,6 +2620,50 @@
     }
   });
 
+  // ---------- 오늘 마지막 캡슐/타로 결과 복원 (페이지 이탈 후 재방문해도 자정 전까지는 그대로 보이게) ----------
+  function restoreCapsuleResult(){
+    try{
+      if(localStorage.getItem('capsuleResultDate') !== todayStr()) return;
+      const raw = localStorage.getItem('capsuleResultData');
+      if(!raw) return;
+      const pick = JSON.parse(raw);
+      currentCapsule = pick;
+      capsuleSlipRank.textContent = pick.rank;
+      capsuleSlipText.textContent = pick.text;
+      capsuleSlipKeyword.textContent = pick.keyword;
+      capsuleResult.hidden = false;
+    }catch(e){ /* ignore */ }
+  }
+
+  function restoreTarotResult(){
+    try{
+      if(localStorage.getItem('tarotResultDate') !== todayStr()) return;
+      const raw = localStorage.getItem('tarotResultData');
+      if(!raw) return;
+      const card = JSON.parse(raw);
+      currentTarot = card;
+      const info = MAJOR_ARCANA_INFO[card.major] || {};
+      tarotSpread.hidden = true;
+      document.getElementById('tarotStartWrap').hidden = true;
+      document.getElementById('tarotPriceTag').hidden = true;
+      document.getElementById('tarotFreeDrawNote').hidden = true;
+      document.getElementById('tarotPaymentNote').hidden = true;
+      tarotResetWrap.hidden = false;
+      const faceEl = document.getElementById('tarotCardFace');
+      faceEl.classList.toggle('reversed', !!card.reversed);
+      document.getElementById('tarotCardNumeral').textContent = info.roman || '';
+      document.getElementById('tarotCardHanja').textContent = info.hanja || '';
+      document.getElementById('tarotCardOrient').textContent = card.reversed ? '역방향' : '정방향';
+      document.getElementById('tarotCardMeaning').textContent = info.meaning || '';
+      document.getElementById('tarotCardName').textContent = card.name;
+      document.getElementById('tarotCardText').textContent = card.text;
+      document.getElementById('tarotCardKeyword').textContent = card.keyword;
+      tarotResult.hidden = false;
+    }catch(e){ /* ignore */ }
+  }
+
+  restoreCapsuleResult();
+  restoreTarotResult();
   handlePaymentRedirectReturn();
 </script>
 
