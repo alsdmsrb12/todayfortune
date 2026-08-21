@@ -1195,8 +1195,8 @@
       </div>
       <div class="draw-count" id="drawCount"></div>
       <div class="payment-note">
-        <span class="payment-badge">TEST</span> 실제 결제는 사이트 배포 후 연결될 예정이에요. 지금은 무료로 체험해 보세요.<br/>
-        결과를 공유하면 무료 뽑기 1회가 적립돼요 (하루 1회, 캡슐·타로 공용 · 매일 자정 초기화)
+        결제 완료 즉시 바로 이용 가능합니다.<br/>
+        공유하면 뽑기 1회 적립 (적립은 하루 1회까지 · 캡슐·타로 어디든 사용 가능 · 매일 자정 초기화)
       </div>
 
       <div class="capsule-result" id="capsuleResult" hidden>
@@ -1208,7 +1208,7 @@
         </div>
         <div class="share-actions no-capture">
           <button id="capsuleShareBtn" class="share-btn share-btn-primary">
-            <span>공유하고 무료 뽑기 받기</span>
+            <span>공유하고 뽑기 받기</span>
           </button>
           <button id="capsuleSaveImgBtn" class="share-btn">
             <span>이미지로 저장</span>
@@ -1237,8 +1237,8 @@
         </button>
       </div>
       <div class="payment-note" id="tarotPaymentNote">
-        <span class="payment-badge">TEST</span> 실제 결제는 사이트 배포 후 연결될 예정이에요. 지금은 무료로 체험해 보세요.<br/>
-        결과를 공유하면 무료 뽑기 1회가 적립돼요 (하루 1회, 캡슐·타로 공용 · 매일 자정 초기화)
+        결제 완료 즉시 바로 이용 가능합니다.<br/>
+        공유하면 뽑기 1회 적립 (적립은 하루 1회까지 · 캡슐·타로 어디든 사용 가능 · 매일 자정 초기화)
       </div>
 
       <div class="tarot-spread" id="tarotSpread" hidden></div>
@@ -1263,7 +1263,7 @@
         </div>
         <div class="share-actions no-capture">
           <button id="tarotShareBtn" class="share-btn share-btn-primary">
-            <span>공유하고 무료 뽑기 받기</span>
+            <span>공유하고 뽑기 받기</span>
           </button>
           <button id="tarotSaveImgBtn" class="share-btn">
             <span>이미지로 저장</span>
@@ -2000,8 +2000,8 @@
 
   // ---------- 포트원(PortOne) 결제 ----------
   // TODO: 포트원 관리자콘솔(admin.portone.io) > 연동 정보 / 채널 관리에서 확인한 값으로 교체하세요. (둘 다 공개돼도 되는 값)
-  const PORTONE_STORE_ID = 'REPLACE_WITH_STORE_ID';
-  const PORTONE_CHANNEL_KEY = 'REPLACE_WITH_CHANNEL_KEY';
+  const PORTONE_STORE_ID = 'store-d39fdca8-da56-4ba3-8d24-2d8077bbdd41';
+  const PORTONE_CHANNEL_KEY = 'channel-key-763fd942-d1d9-4cd7-a2d5-b174adaadaf9'; // 토스페이먼츠 테스트 채널 (실연동 전 결제창 동작 확인용)
   const DRAW_PRICE = 500;
 
   function generatePaymentId(){
@@ -2010,8 +2010,7 @@
 
   // 무료 뽑기가 없을 때 호출: 결제 성공 + 서버 검증까지 통과해야 true를 반환
   async function requestDrawPayment(orderName){
-    // 포트원 키가 아직 실제 값으로 교체되지 않은 TEST 상태에서는 결제 없이 통과시킨다
-    // (페이지에 "지금은 무료로 체험해 보세요" 안내가 붙어있는 현재 정책과 동일하게 유지 — 실제 키를 넣는 순간 자동으로 결제 게이트가 켜짐)
+    // 포트원 키가 아직 REPLACE_ 플레이스홀더인 경우에만 결제 없이 통과 (현재는 실키가 들어가 있어 해당 없음)
     if(PORTONE_STORE_ID.startsWith('REPLACE_') || PORTONE_CHANNEL_KEY.startsWith('REPLACE_')){
       console.warn('[결제] 포트원 키가 설정되지 않아 TEST 모드로 무료 통과합니다.');
       return true;
@@ -2157,7 +2156,7 @@
       if(!note || !btnPrice) return;
       if(n > 0){
         note.hidden = false;
-        note.textContent = `무료 뽑기 ${n}회 남음`;
+        note.textContent = `뽑기 ${n}회 남음`;
         btnPrice.textContent = '무료';
       }else{
         note.hidden = true;
@@ -2216,8 +2215,8 @@
     if(shared){
       const rewarded = grantFreeCapsuleForShare();
       showCapsuleShareStatus(rewarded
-        ? '공유 감사해요! 무료 뽑기 1회가 적립됐어요.'
-        : '운세 내용이 복사(또는 공유)되었습니다. (무료 뽑기 적립은 하루 1회예요)');
+        ? '공유 감사해요! 뽑기 1회가 적립됐어요.'
+        : '운세 내용이 복사(또는 공유)되었습니다. (적립은 하루 1회예요)');
     }
   });
 
@@ -2493,8 +2492,8 @@
     if(shared){
       const rewarded = grantFreeCapsuleForShare();
       showTarotShareStatus(rewarded
-        ? '공유 감사해요! 무료 뽑기 1회가 적립됐어요.'
-        : '운세 내용이 복사(또는 공유)되었습니다. (무료 뽑기 적립은 하루 1회예요)');
+        ? '공유 감사해요! 뽑기 1회가 적립됐어요.'
+        : '운세 내용이 복사(또는 공유)되었습니다. (적립은 하루 1회예요)');
     }
   });
 
