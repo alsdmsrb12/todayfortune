@@ -5,14 +5,31 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <meta name="color-scheme" content="light" />
 <meta name="theme-color" content="#EFE7D4" />
-<title>오늘의 운세</title>
+<meta name="google-adsense-account" content="ca-pub-2401042525579221">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2401042525579221" crossorigin="anonymous"></script>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="/favicon-512.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<title>오늘의 운세 - 무료 오늘 운세 보기 | 캡슐 뽑기 · 타로카드</title>
+<meta name="description" content="이름과 생년월일만 입력하면 오늘 하루의 운세를 무료로 확인할 수 있어요. 매일 아침 캡슐 뽑기, 타로카드 운세로 오늘의 기운을 재미있게 확인해보세요." />
+<link rel="canonical" href="https://myfortunetoday.com/" />
 <meta property="og:title" content="오늘의 운세" />
 <meta property="og:description" content="이름과 생년월일을 입력하면 오늘 하루의 운세를 알려드려요." />
 <meta property="og:type" content="website" />
 <meta property="og:locale" content="ko_KR" />
+<meta property="og:url" content="https://myfortunetoday.com" />
+<meta property="og:image" content="https://myfortunetoday.com/og-image.jpg" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://myfortunetoday.com/og-image.jpg" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Serif+KR:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdn.portone.io/v2/browser-sdk.js"></script>
 <style>
   :root{
     --hanji: #EFE7D4;
@@ -163,12 +180,25 @@
     letter-spacing:0.02em;
   }
 
+  .streak-badge{
+    display:inline-block;
+    margin: 14px auto 0;
+    padding: 6px 16px;
+    border: 1px solid var(--seal, #A23B2E);
+    border-radius: 999px;
+    color: var(--seal, #A23B2E);
+    font-size: 12.5px;
+    letter-spacing: 0.02em;
+  }
+  .streak-badge[hidden]{ display:none; }
+
   /* ---------- tabs ---------- */
   .tabs{
     display:flex;
     justify-content:center;
     gap: 8px;
     margin-bottom: 36px;
+    flex-wrap: nowrap;
   }
   .tab{
     appearance:none; cursor:pointer;
@@ -180,7 +210,12 @@
     font-size: 13.5px;
     letter-spacing:0.04em;
     color: var(--ink-soft);
+    white-space: nowrap;
     transition: background .15s ease, color .15s ease, border-color .15s ease;
+  }
+  @media (max-width: 420px){
+    .tabs{ gap:6px; }
+    .tab{ padding: 8px 12px; font-size:12px; }
   }
   .tab.active{
     background: var(--ink);
@@ -252,6 +287,7 @@
     display:flex;
     justify-content:center;
   }
+  .actions[hidden]{ display:none; }
 
   .seal-button{
     appearance:none;
@@ -633,6 +669,7 @@
     border-radius: 12px;
     padding: 3px 12px;
   }
+  .price-tag[hidden]{ display:none; }
 
   .payment-note{
     margin-top:16px;
@@ -647,6 +684,17 @@
     letter-spacing:0.04em;
     min-height:14px;
   }
+  .free-draw-note{
+    display:inline-block;
+    margin: 0 auto 14px;
+    font-size:12px;
+    letter-spacing:0.04em;
+    color: var(--seal);
+    border: 1px solid var(--seal);
+    border-radius: 12px;
+    padding: 3px 12px;
+  }
+  .free-draw-note[hidden]{ display:none; }
   .payment-badge{
     display:inline-block;
     font-size:9.5px;
@@ -705,6 +753,115 @@
     letter-spacing:0.04em;
   }
 
+  /* ---------- tarot card face ---------- */
+  .tarot-face{
+    width: 116px;
+    aspect-ratio: 2 / 3;
+    margin: 0 auto 18px;
+    position: relative;
+    border-radius: 8px;
+    border: 1.5px solid var(--seal);
+    background:
+      radial-gradient(circle at 50% 30%, rgba(163,47,39,0.08), transparent 60%),
+      linear-gradient(160deg, rgba(255,253,246,0.9), rgba(239,231,212,0.75));
+    box-shadow: 0 10px 22px -14px rgba(33,29,23,0.55);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    animation: tarotFaceIn .5s ease;
+  }
+  .tarot-face::before{
+    content:'';
+    position:absolute; inset:6px;
+    border: 1px solid var(--hanji-edge);
+    border-radius: 4px;
+    pointer-events:none;
+  }
+  @keyframes tarotFaceIn{
+    0%{ transform: scale(0.85) rotateY(90deg); opacity:0; }
+    100%{ transform: scale(1) rotateY(0); opacity:1; }
+  }
+  .tarot-face-inner{
+    text-align:center;
+    transition: transform .3s ease;
+  }
+  .tarot-face.reversed .tarot-face-inner{ transform: rotate(180deg); }
+  .tarot-face-numeral{
+    font-family:'Nanum Myeongjo', serif;
+    font-weight:800;
+    font-size:19px;
+    letter-spacing:0.05em;
+    color: var(--seal);
+  }
+  .tarot-face-hanja{
+    font-family:'Nanum Myeongjo', serif;
+    font-size:34px;
+    color: var(--ink);
+    margin-top:6px;
+    line-height:1;
+  }
+  .tarot-face-orient{
+    position:absolute;
+    bottom:8px;
+    right:10px;
+    font-size:10.5px;
+    color: var(--ink-soft);
+    opacity:0.65;
+    letter-spacing:0.03em;
+  }
+  .tarot-meaning{
+    font-size:13px;
+    color: var(--ink-soft);
+    font-style:italic;
+    margin: -6px 0 16px;
+    letter-spacing:0.01em;
+  }
+
+  /* ---------- tarot ---------- */
+  .tarot-card{ text-align:center; }
+  .tarot-spread{
+    display:grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    max-width: 420px;
+    margin: 30px auto 6px;
+  }
+  .tarot-spread[hidden]{ display:none; }
+  @media (max-width: 480px){
+    .tarot-spread{ grid-template-columns: repeat(3, 1fr); gap:10px; }
+  }
+  .tarot-pick{
+    appearance:none; cursor:pointer;
+    aspect-ratio: 2 / 3;
+    border-radius: 6px;
+    border: 1px solid var(--hanji-edge);
+    background:
+      linear-gradient(135deg, rgba(60,78,92,0.16) 0%, transparent 45%),
+      linear-gradient(315deg, rgba(163,47,39,0.14) 0%, transparent 45%),
+      var(--ink);
+    position:relative;
+    box-shadow: 0 8px 18px -12px rgba(33,29,23,0.5);
+    transition: transform .15s ease, opacity .3s ease;
+  }
+  .tarot-pick::before{
+    content:'運';
+    position:absolute; inset:0;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Nanum Myeongjo', serif;
+    font-size: 20px;
+    color: rgba(246,233,221,0.35);
+  }
+  .tarot-pick:hover:not(:disabled){ transform: translateY(-4px); }
+  .tarot-pick:disabled{ opacity:0.3; cursor:default; }
+  .tarot-pick.chosen{
+    animation: tarotFlip .5s ease forwards;
+  }
+  @keyframes tarotFlip{
+    0%{ transform: scale(1) rotateY(0); }
+    50%{ transform: scale(1.08) rotateY(90deg); }
+    100%{ transform: scale(1.08) rotateY(0); opacity:0; }
+  }
+
   footer{
     text-align:center;
     margin-top:56px;
@@ -727,10 +884,11 @@
   }
   .footer-dot{ color: var(--hanji-edge); margin: 0 2px; }
   .footer-biz{
-    margin-top:8px;
-    font-size:10px;
-    color: var(--hanji-edge);
-    letter-spacing:0.03em;
+    margin-top:10px;
+    font-size:11.5px;
+    line-height:1.7;
+    color: var(--ink-soft);
+    letter-spacing:0.02em;
   }
 
   /* ---------- privacy/terms modal ---------- */
@@ -869,11 +1027,13 @@
     <p class="eyebrow">TODAY&nbsp;&nbsp;·&nbsp;&nbsp;오늘의 운세</p>
     <h1 class="brush-title">오늘의 운세</h1>
     <p class="subtitle" id="heroSubtitle">이름과 생년월일을 적으시면, 오늘 하루의 기운을 살펴드립니다</p>
+    <p class="streak-badge" id="streakBadge" hidden></p>
   </div>
 
   <div class="tabs" role="tablist">
     <button class="tab active" id="tabPersonal" data-tab="personal" role="tab" aria-selected="true">이름으로 보기</button>
     <button class="tab" id="tabCapsule" data-tab="capsule" role="tab" aria-selected="false">캡슐 뽑기</button>
+    <button class="tab" id="tabTarot" data-tab="tarot" role="tab" aria-selected="false">타로카드</button>
   </div>
 
   <div class="tab-panel" id="panelPersonal">
@@ -902,6 +1062,7 @@
         <span class="seal-label">운세 보기</span>
       </button>
     </div>
+    <div class="draw-count" id="personalQuotaNote"></div>
   </div>
 
   <div class="result-scroll" id="resultScroll" aria-live="polite">
@@ -984,9 +1145,9 @@
       </div>
 
       <div class="error-box" id="errorState" style="display:none;">
-        하늘이 잠시 흐려졌습니다. 잠시 후 다시 시도해 주세요.<br/>
+        <span id="errorHeading">하늘이 잠시 흐려졌습니다. 잠시 후 다시 시도해 주세요.</span><br/>
         <div id="errorDetail" style="font-size:11px; color:var(--ink-faint); margin-top:10px; word-break:break-all;"></div>
-        <div class="retry-note"><button id="retryBtnErr">다시 시도하기</button></div>
+        <div class="retry-note" id="errorRetryWrap"><button id="retryBtnErr">다시 시도하기</button></div>
       </div>
 
     </div>
@@ -997,7 +1158,7 @@
   <div class="tab-panel" id="panelCapsule" hidden>
 
     <div class="card capsule-card">
-      <p class="capsule-desc">이름도 생년월일도 필요 없어요 — 캡슐 하나만 톡 뽑으면, 오늘의 운이 쪽지 한 장에 담겨 나와요.</p>
+      <p class="capsule-desc">캡슐 하나만 톡 뽑으면, 오늘의 운이 쪽지 한 장에 담겨 나와요.</p>
 
       <div class="capsule-machine">
         <div class="capsule-glass">
@@ -1023,16 +1184,18 @@
         <div class="capsule-stand"></div>
       </div>
 
-      <div class="price-tag">1회 500원</div>
+      <div class="price-tag" id="capsulePriceTag">1회 500원</div>
+      <div class="free-draw-note" id="freeDrawNote" hidden></div>
       <div class="actions">
         <button class="seal-button capsule-btn" id="capsuleDrawBtn" aria-label="500원 결제하고 캡슐 뽑기">
-          <span class="seal-char">₩500</span>
+          <span class="seal-char" id="capsuleBtnPrice">₩500</span>
           <span class="seal-label">캡슐 뽑기</span>
         </button>
       </div>
       <div class="draw-count" id="drawCount"></div>
       <div class="payment-note">
-        <span class="payment-badge">TEST</span> 실제 결제는 사이트 배포 후 연결될 예정이에요. 지금은 무료로 체험해 보세요.
+        <span class="payment-badge">TEST</span> 실제 결제는 사이트 배포 후 연결될 예정이에요. 지금은 무료로 체험해 보세요.<br/>
+        결과를 공유하면 무료 뽑기 1회가 적립돼요 (하루 1회, 캡슐·타로 공용 · 매일 자정 초기화)
       </div>
 
       <div class="capsule-result" id="capsuleResult" hidden>
@@ -1044,7 +1207,7 @@
         </div>
         <div class="share-actions no-capture">
           <button id="capsuleShareBtn" class="share-btn share-btn-primary">
-            <span>공유하기</span>
+            <span>공유하고 무료 뽑기 받기</span>
           </button>
           <button id="capsuleSaveImgBtn" class="share-btn">
             <span>이미지로 저장</span>
@@ -1059,14 +1222,71 @@
 
   </div><!-- /panelCapsule -->
 
+  <div class="tab-panel" id="panelTarot" hidden>
+
+    <div class="card tarot-card">
+      <p class="capsule-desc">마음속으로 궁금한 것을 떠올리며, 카드 한 장을 골라보세요.</p>
+
+      <div class="price-tag" id="tarotPriceTag">1회 500원</div>
+      <div class="free-draw-note" id="tarotFreeDrawNote" hidden></div>
+      <div class="actions" id="tarotStartWrap">
+        <button class="seal-button capsule-btn" id="tarotStartBtn" aria-label="500원 결제하고 타로 보기">
+          <span class="seal-char" id="tarotBtnPrice">₩500</span>
+          <span class="seal-label">타로 보기</span>
+        </button>
+      </div>
+      <div class="payment-note" id="tarotPaymentNote">
+        <span class="payment-badge">TEST</span> 실제 결제는 사이트 배포 후 연결될 예정이에요. 지금은 무료로 체험해 보세요.<br/>
+        결과를 공유하면 무료 뽑기 1회가 적립돼요 (하루 1회, 캡슐·타로 공용 · 매일 자정 초기화)
+      </div>
+
+      <div class="tarot-spread" id="tarotSpread" hidden></div>
+
+      <div class="retry-note no-capture" id="tarotResetWrap" hidden>
+        <button id="tarotResetBtn">다시 뽑기</button>
+      </div>
+
+      <div class="tarot-result" id="tarotResult" hidden>
+        <div class="slip" id="tarotSlip">
+          <div class="tarot-face" id="tarotCardFace">
+            <div class="tarot-face-inner" id="tarotCardFaceInner">
+              <div class="tarot-face-numeral" id="tarotCardNumeral"></div>
+              <div class="tarot-face-hanja" id="tarotCardHanja"></div>
+            </div>
+            <div class="tarot-face-orient" id="tarotCardOrient"></div>
+          </div>
+          <div class="slip-rank" id="tarotCardName"></div>
+          <div class="tarot-meaning" id="tarotCardMeaning"></div>
+          <div class="slip-text" id="tarotCardText"></div>
+          <div class="slip-keyword" id="tarotCardKeyword"></div>
+        </div>
+        <div class="share-actions no-capture">
+          <button id="tarotShareBtn" class="share-btn share-btn-primary">
+            <span>공유하고 무료 뽑기 받기</span>
+          </button>
+          <button id="tarotSaveImgBtn" class="share-btn">
+            <span>이미지로 저장</span>
+          </button>
+        </div>
+        <div class="share-status" id="tarotShareStatus"></div>
+      </div>
+    </div>
+
+  </div><!-- /panelTarot -->
+
   <footer>
-    새벽마다 새로운 기운이 흐릅니다 · Fortune AI
+    새벽마다 새로운 기운이 흐릅니다
     <div class="footer-links">
       <button class="footer-link" id="openPrivacyBtn" type="button">개인정보처리방침</button>
       <span class="footer-dot">·</span>
       <button class="footer-link" id="openTermsBtn" type="button">이용약관</button>
     </div>
-    <div class="footer-biz">사업자 정보: 등록 절차 진행 중 (등록 완료 후 표기 예정)</div>
+    <div class="footer-biz">
+      상호: 오늘의운세 · 대표: 민은규<br/>
+      사업자등록번호: 878-29-01946 · 통신판매업 신고번호: 신고 진행 중<br/>
+      사업장 소재지: 경상남도 산청군 금서면 친환경로 2563-31<br/>
+      전화: 070-4544-7694 · 이메일: alsdmsrb12@gmail.com
+    </div>
   </footer>
 </div>
 
@@ -1092,9 +1312,12 @@
       입력하신 이름, 생년월일, 성별 정보는 운세 콘텐츠 생성을 위해 AI 처리 업체에 전달되며, 그 외의 제3자에게 제공되지 않습니다.</p>
 
       <p><strong>제5조 (이용자의 권리)</strong><br/>
-      이용자는 언제든지 자신의 개인정보 처리에 대한 열람, 정정, 삭제를 요청할 수 있습니다. 문의는 하단 사업자 정보의 연락처를 통해 접수해 주세요.</p>
+      이용자는 언제든지 자신의 개인정보 처리에 대한 열람, 정정, 삭제를 요청할 수 있습니다. 문의는 아래 연락처로 접수해 주세요.</p>
 
-      <p class="policy-note">※ 본 문서는 서비스 준비 단계의 초안이며, 정식 배포 전 사업자 정보 및 연락처 등을 확정해 반영할 예정입니다.</p>
+      <p><strong>제6조 (개인정보 보호책임자 및 문의처)</strong><br/>
+      상호: 오늘의운세 (대표 민은규)<br/>
+      전화: 070-4544-7694<br/>
+      이메일: alsdmsrb12@gmail.com</p>
     </div>
   </div>
 </div>
@@ -1113,16 +1336,28 @@
       · 오늘의 운세: 이름과 생년월일을 입력하면 AI가 생성하는 무료 콘텐츠입니다.<br/>
       · 캡슐운세: 개인정보 입력 없이 건당 500원에 랜덤으로 제공되는 유료 콘텐츠입니다.</p>
 
-      <p><strong>제3조 (결제 및 환불)</strong><br/>
-      캡슐운세는 결제 즉시 결과가 지급되는 디지털 콘텐츠로, 특성상 제공이 완료된 이후에는 전자상거래법에 따라 청약철회가 제한될 수 있습니다.</p>
+      <p><strong>제3조 (결제)</strong><br/>
+      캡슐운세는 건당 500원이 결제와 동시에 즉시 지급되는 디지털 콘텐츠입니다. 결제는 서비스와 제휴한 전자지급결제대행(PG)사를 통해 처리되며, 서비스는 이용자의 카드정보 등 결제 수단 정보를 직접 저장하지 않습니다.</p>
 
-      <p><strong>제4조 (콘텐츠 성격 및 면책)</strong><br/>
+      <p><strong>제4조 (환불정책)</strong><br/>
+      · 캡슐운세는 결제 즉시 콘텐츠가 생성·제공되는 디지털 콘텐츠의 특성상, 전자상거래 등에서의 소비자보호에 관한 법률 제17조 제2항에 따라 <strong>제공이 완료된 이후에는 원칙적으로 청약철회(환불)가 제한</strong>됩니다.<br/>
+      · 다만 아래의 경우에는 환불이 가능합니다.<br/>
+      &nbsp;&nbsp;1) 결제는 완료되었으나 시스템 오류 등으로 콘텐츠가 정상적으로 제공되지 않은 경우<br/>
+      &nbsp;&nbsp;2) 이용자의 귀책사유 없이 중복 결제가 발생한 경우<br/>
+      &nbsp;&nbsp;3) 관련 법령에서 환불을 의무로 정하고 있는 경우<br/>
+      · 환불이 필요한 경우 결제일로부터 7일 이내에 하단 연락처로 결제 내역(결제 시각, 금액)을 알려주시면 확인 후 영업일 기준 3~5일 이내에 처리해 드립니다.<br/>
+      · 환불 접수: 전화 070-4544-7694 · 이메일 alsdmsrb12@gmail.com</p>
+
+      <p><strong>제5조 (콘텐츠 성격 및 면책)</strong><br/>
       본 서비스가 제공하는 운세 콘텐츠는 오락 목적의 참고용 정보이며, 실제 사건이나 결과를 예측·보증하지 않습니다. 이용자의 중요한 결정은 본 서비스의 내용과 무관하게 독립적으로 이루어져야 하며, 서비스는 이에 대한 책임을 지지 않습니다.</p>
 
-      <p><strong>제5조 (사업자 정보)</strong><br/>
-      상호, 사업자등록번호, 대표자명, 통신판매업 신고번호 등은 등록 절차 완료 후 본 조항에 표기됩니다.</p>
-
-      <p class="policy-note">※ 본 문서는 서비스 준비 단계의 초안입니다. 정식 배포 전 법률 검토를 거쳐 최종 확정할 예정입니다.</p>
+      <p><strong>제6조 (사업자 정보)</strong><br/>
+      상호: 오늘의운세<br/>
+      대표자: 민은규<br/>
+      사업자등록번호: 878-29-01946<br/>
+      통신판매업 신고번호: 신고 진행 중 (완료 후 표기)<br/>
+      사업장 소재지: 경상남도 산청군 금서면 친환경로 2563-31<br/>
+      전화: 070-4544-7694 · 이메일: alsdmsrb12@gmail.com</p>
     </div>
   </div>
 </div>
@@ -1160,6 +1395,34 @@
 
   // 오늘 날짜를 넘는 생년월일은 선택 불가하도록 제한 (매일 갱신됨)
   birthInput.max = new Date().toISOString().slice(0,10);
+
+  // ---------- 이미지 저장 (iOS Safari는 <a download>가 무시되고 새 탭으로 열려서 안내 문구를 다르게 보여준다) ----------
+  function isIOSSafari(){
+    const ua = navigator.userAgent || '';
+    const isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    const isWebkit = /WebKit/.test(ua);
+    const isChromeOnIOS = /CriOS/.test(ua);
+    return isIOS && isWebkit && !isChromeOnIOS;
+  }
+
+  function saveOrOpenBlob(blob, filename, statusFn){
+    if(!blob){ statusFn('이미지 생성에 실패했습니다.'); return; }
+    const url = URL.createObjectURL(blob);
+    if(isIOSSafari()){
+      // iOS Safari에서는 다운로드 속성이 무시되므로 새 탭으로 열어 '길게 눌러 저장'을 안내한다
+      window.open(url, '_blank');
+      statusFn('이미지가 새 탭에서 열렸어요. 이미지를 길게 눌러 "사진에 저장"을 선택해 주세요.');
+    }else{
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      statusFn('이미지가 저장되었습니다.');
+    }
+    setTimeout(()=> URL.revokeObjectURL(url), 30000);
+  }
 
   // 네이티브 날짜 선택기가 min/max를 못 지키는 기기 대비, 값이 바뀔 때마다 직접 한 번 더 검증
   function validateBirthInput(){
@@ -1206,6 +1469,10 @@
     errorState.style.display = 'none';
     loadingState.style.display = 'flex';
     stampMark.classList.remove('show');
+    const headingEl = document.getElementById('errorHeading');
+    const retryWrap = document.getElementById('errorRetryWrap');
+    if(headingEl) headingEl.textContent = '하늘이 잠시 흐려졌습니다. 잠시 후 다시 시도해 주세요.';
+    if(retryWrap) retryWrap.hidden = false;
     const loadingTextEl = document.getElementById('loadingText');
     if(loadingTextEl){
       loadingTextEl.textContent = LOADING_MESSAGES[Math.floor(Math.random() * LOADING_MESSAGES.length)];
@@ -1325,6 +1592,74 @@
     }
   }
 
+  // ---------- 하루 무료 생성 횟수 제한 (AI 호출 비용 보호) ----------
+  const PERSONAL_DAILY_LIMIT = 2;
+
+  function personalFortuneCountKey(){
+    const today = new Date().toISOString().slice(0,10);
+    return `personalFortuneCount:${today}`;
+  }
+
+  function getPersonalFortuneCount(){
+    try{
+      const raw = window.localStorage.getItem(personalFortuneCountKey());
+      return raw ? (parseInt(raw, 10) || 0) : 0;
+    }catch(e){ return 0; }
+  }
+
+  function bumpPersonalFortuneCount(){
+    const n = getPersonalFortuneCount() + 1;
+    try{ window.localStorage.setItem(personalFortuneCountKey(), String(n)); }catch(e){ /* ignore */ }
+    return n;
+  }
+
+  function updatePersonalQuotaNote(){
+    const note = document.getElementById('personalQuotaNote');
+    if(!note) return;
+    const remaining = Math.max(0, PERSONAL_DAILY_LIMIT - getPersonalFortuneCount());
+    note.textContent = `오늘 새로운 운세 생성 가능 횟수: ${remaining}/${PERSONAL_DAILY_LIMIT}회 (같은 이름·생년월일 재조회는 무제한 · 매일 자정 초기화)`;
+  }
+  updatePersonalQuotaNote();
+
+  // ---------- 연속 방문 스트릭 ----------
+  function todayStr(){ return new Date().toISOString().slice(0,10); }
+  function yesterdayStr(){
+    const d = new Date();
+    d.setDate(d.getDate() - 1);
+    return d.toISOString().slice(0,10);
+  }
+
+  function updateVisitStreak(){
+    const badge = document.getElementById('streakBadge');
+    try{
+      const today = todayStr();
+      const lastVisit = window.localStorage.getItem('lastVisitDate');
+      let streak = parseInt(window.localStorage.getItem('visitStreak') || '0', 10) || 0;
+
+      if(lastVisit === today){
+        // 오늘 이미 방문 처리됨 - 값만 표시
+      } else if(lastVisit === yesterdayStr()){
+        streak += 1;
+        window.localStorage.setItem('visitStreak', String(streak));
+        window.localStorage.setItem('lastVisitDate', today);
+      } else {
+        streak = 1;
+        window.localStorage.setItem('visitStreak', String(streak));
+        window.localStorage.setItem('lastVisitDate', today);
+      }
+
+      if(badge){
+        if(streak >= 2){
+          badge.textContent = `연속 ${streak}일째 확인하고 있어요`;
+          badge.hidden = false;
+        }else{
+          badge.hidden = true;
+        }
+      }
+    }catch(e){ /* localStorage 사용 불가 시 조용히 무시 */ }
+  }
+  updateVisitStreak();
+
   async function runFortune(){
     if(submitBtn.disabled) return; // 중복 실행 방지(엔터 연타 등)
     const name = nameInput.value.trim();
@@ -1359,6 +1694,18 @@
       let fortune = await getCachedFortune(cacheKey);
       let fromCache = !!fortune;
       if(!fortune){
+        if(getPersonalFortuneCount() >= PERSONAL_DAILY_LIMIT){
+          loadingState.style.display = 'none';
+          errorState.style.display = 'block';
+          const headingEl = document.getElementById('errorHeading');
+          const detailEl = document.getElementById('errorDetail');
+          const retryWrap = document.getElementById('errorRetryWrap');
+          if(headingEl) headingEl.textContent = '오늘의 무료 운세를 이미 다 확인하셨어요.';
+          if(detailEl) detailEl.textContent = `하루 ${PERSONAL_DAILY_LIMIT}회까지 새로운 운세를 볼 수 있어요. 자정이 지나면 초기화되니 내일 다시 만나요! (캡슐 뽑기·타로카드는 계속 이용하실 수 있어요)`;
+          if(retryWrap) retryWrap.hidden = true;
+          submitBtn.disabled = false;
+          return;
+        }
         try{
           fortune = await fetchFortune(name, birth, gender);
         }catch(firstErr){
@@ -1366,6 +1713,8 @@
           fortune = await fetchFortune(name, birth, gender);
         }
         await setCachedFortune(cacheKey, fortune);
+        bumpPersonalFortuneCount();
+        updatePersonalQuotaNote();
       }
       renderResult(fortune, fromCache);
     }catch(err){
@@ -1396,7 +1745,8 @@
       `총운(${f.totalScore}점) · ${f.totalTitle}\n${f.totalText}\n\n` +
       `애정운: ${f.loveText}\n재물운: ${f.wealthText}\n\n` +
       `행운의 색: ${f.luckyColorName} · 행운의 아이템: ${f.luckyItem} · 행운의 숫자: ${f.luckyNumber}\n\n` +
-      `"${f.advice}"`;
+      `"${f.advice}"\n\n` +
+      `내 운세도 보러가기: https://myfortunetoday.com`;
   }
 
   function showShareStatus(msg){
@@ -1441,16 +1791,7 @@
         ignoreElements: (el) => el.classList && el.classList.contains('no-capture')
       });
       canvas.toBlob((blob)=>{
-        if(!blob){ showShareStatus('이미지 생성에 실패했습니다.'); return; }
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `오늘의운세_${currentName || 'fortune'}.png`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-        showShareStatus('이미지가 저장되었습니다.');
+        saveOrOpenBlob(blob, `오늘의운세_${currentName || 'fortune'}.png`, showShareStatus);
       }, 'image/png');
     }catch(err){
       console.error(err);
@@ -1470,24 +1811,33 @@
   // ---------- tabs ----------
   const tabPersonal = document.getElementById('tabPersonal');
   const tabCapsule = document.getElementById('tabCapsule');
+  const tabTarot = document.getElementById('tabTarot');
   const panelPersonal = document.getElementById('panelPersonal');
   const panelCapsule = document.getElementById('panelCapsule');
+  const panelTarot = document.getElementById('panelTarot');
   const heroSubtitle = document.getElementById('heroSubtitle');
 
+  const TAB_SUBTITLES = {
+    personal: '이름과 생년월일을 적으시면, 오늘 하루의 기운을 살펴드립니다',
+    capsule: '캡슐 하나를 뽑아 오늘의 운을 확인해 보세요',
+    tarot: '카드 한 장에 담긴 오늘의 메시지를 확인해 보세요'
+  };
+
   function switchTab(tab){
-    const isPersonal = tab === 'personal';
-    tabPersonal.classList.toggle('active', isPersonal);
-    tabCapsule.classList.toggle('active', !isPersonal);
-    tabPersonal.setAttribute('aria-selected', String(isPersonal));
-    tabCapsule.setAttribute('aria-selected', String(!isPersonal));
-    panelPersonal.hidden = !isPersonal;
-    panelCapsule.hidden = isPersonal;
-    heroSubtitle.textContent = isPersonal
-      ? '이름과 생년월일을 적으시면, 오늘 하루의 기운을 살펴드립니다'
-      : '캡슐 하나를 뽑아 오늘의 운을 확인해 보세요';
+    tabPersonal.classList.toggle('active', tab === 'personal');
+    tabCapsule.classList.toggle('active', tab === 'capsule');
+    tabTarot.classList.toggle('active', tab === 'tarot');
+    tabPersonal.setAttribute('aria-selected', String(tab === 'personal'));
+    tabCapsule.setAttribute('aria-selected', String(tab === 'capsule'));
+    tabTarot.setAttribute('aria-selected', String(tab === 'tarot'));
+    panelPersonal.hidden = tab !== 'personal';
+    panelCapsule.hidden = tab !== 'capsule';
+    panelTarot.hidden = tab !== 'tarot';
+    heroSubtitle.textContent = TAB_SUBTITLES[tab] || TAB_SUBTITLES.personal;
   }
   tabPersonal.addEventListener('click', ()=> switchTab('personal'));
   tabCapsule.addEventListener('click', ()=> switchTab('capsule'));
+  tabTarot.addEventListener('click', ()=> switchTab('tarot'));
 
   // ---------- capsule gacha ----------
   const CAPSULE_FORTUNES = [
@@ -1580,6 +1930,34 @@
     }
   }
 
+  function playFlipSound(){
+    const ctx = getAudioCtx();
+    if(!ctx) return;
+    const now = ctx.currentTime;
+    // 카드가 휙 뒤집히는 느낌의 짧은 스윕음 + 살짝의 '탁' 마무리음
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(520, now);
+    osc.frequency.exponentialRampToValueAtTime(140, now + 0.16);
+    gain.gain.setValueAtTime(0.001, now);
+    gain.gain.linearRampToValueAtTime(0.16, now + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+    osc.connect(gain).connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.2);
+
+    const tap = ctx.createOscillator();
+    const tapGain = ctx.createGain();
+    tap.type = 'square';
+    tap.frequency.value = 900;
+    tapGain.gain.setValueAtTime(0.08, now + 0.17);
+    tapGain.gain.exponentialRampToValueAtTime(0.001, now + 0.23);
+    tap.connect(tapGain).connect(ctx.destination);
+    tap.start(now + 0.17);
+    tap.stop(now + 0.24);
+  }
+
   function playPopSound(){
     const ctx = getAudioCtx();
     if(!ctx) return;
@@ -1617,8 +1995,76 @@
     return count;
   }
 
-  function drawCapsule(){
+  // ---------- 포트원(PortOne) 결제 ----------
+  // TODO: 포트원 관리자콘솔(admin.portone.io) > 연동 정보 / 채널 관리에서 확인한 값으로 교체하세요. (둘 다 공개돼도 되는 값)
+  const PORTONE_STORE_ID = 'REPLACE_WITH_STORE_ID';
+  const PORTONE_CHANNEL_KEY = 'REPLACE_WITH_CHANNEL_KEY';
+  const DRAW_PRICE = 500;
+
+  function generatePaymentId(){
+    return (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : ('p_' + Date.now() + '_' + Math.random().toString(36).slice(2));
+  }
+
+  // 무료 뽑기가 없을 때 호출: 결제 성공 + 서버 검증까지 통과해야 true를 반환
+  async function requestDrawPayment(orderName){
+    // 포트원 키가 아직 실제 값으로 교체되지 않은 TEST 상태에서는 결제 없이 통과시킨다
+    // (페이지에 "지금은 무료로 체험해 보세요" 안내가 붙어있는 현재 정책과 동일하게 유지 — 실제 키를 넣는 순간 자동으로 결제 게이트가 켜짐)
+    if(PORTONE_STORE_ID.startsWith('REPLACE_') || PORTONE_CHANNEL_KEY.startsWith('REPLACE_')){
+      console.warn('[결제] 포트원 키가 설정되지 않아 TEST 모드로 무료 통과합니다.');
+      return true;
+    }
+    let response;
+    try{
+      response = await PortOne.requestPayment({
+        storeId: PORTONE_STORE_ID,
+        channelKey: PORTONE_CHANNEL_KEY,
+        paymentId: generatePaymentId(),
+        orderName,
+        totalAmount: DRAW_PRICE,
+        currency: 'CURRENCY_KRW',
+        payMethod: 'CARD'
+      });
+    }catch(e){
+      alert('결제 중 오류가 발생했습니다. 다시 시도해 주세요.');
+      return false;
+    }
+    if(!response || response.code){
+      if(response && response.message) alert(response.message);
+      return false;
+    }
+    try{
+      const verifyRes = await fetch('/api/verify-payment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ paymentId: response.paymentId })
+      });
+      const verifyData = await verifyRes.json();
+      if(!verifyRes.ok || !verifyData.ok){
+        alert(verifyData.error || '결제 확인에 실패했습니다. 고객센터로 문의해 주세요.');
+        return false;
+      }
+      return true;
+    }catch(e){
+      alert('결제 확인 중 오류가 발생했습니다.');
+      return false;
+    }
+  }
+
+  async function drawCapsule(){
     if(capsuleDrawBtn.disabled) return; // 애니메이션 진행 중 중복 클릭(연타) 방지
+    const usedFreeDraw = getFreeCapsuleCount() > 0; // 이번 뽑기가 무료 뽑기 차감분인지 기록
+
+    if(!usedFreeDraw){
+      capsuleDrawBtn.disabled = true;
+      capsuleRetryBtn.disabled = true;
+      const paid = await requestDrawPayment('캡슐 뽑기');
+      if(!paid){
+        capsuleDrawBtn.disabled = false;
+        capsuleRetryBtn.disabled = false;
+        return;
+      }
+    }
+
     capsuleDrawBtn.disabled = true;
     capsuleRetryBtn.disabled = true;
     capsuleResult.hidden = true;
@@ -1662,6 +2108,12 @@
             const count = await bumpCapsuleCount();
             const drawCountEl = document.getElementById('drawCount');
             if(drawCountEl) drawCountEl.textContent = `오늘 ${count}번째 캡슐이에요`;
+
+            // 무료 뽑기가 있었다면 이번 1회분 차감 (실제 결제 연동 전까지는 시각적 표시 목적)
+            if(usedFreeDraw){
+              setFreeCapsuleCount(getFreeCapsuleCount() - 1);
+              updateFreeCapsuleUI();
+            }
           }, 380);
         }, 550);
       }, 420);
@@ -1670,10 +2122,67 @@
 
   capsuleDrawBtn.addEventListener('click', drawCapsule);
   capsuleRetryBtn.addEventListener('click', drawCapsule);
+  updateFreeCapsuleUI();
 
   function buildCapsuleShareText(){
     if(!currentCapsule) return '';
-    return `[캡슐운세] ${currentCapsule.rank}\n\n${currentCapsule.text}\n\n${currentCapsule.keyword}`;
+    return `[캡슐운세] ${currentCapsule.rank}\n\n${currentCapsule.text}\n\n${currentCapsule.keyword}\n\n오늘의 운세 보러가기: https://myfortunetoday.com`;
+  }
+
+  // ---------- 공유하면 무료 뽑기 1회 (하루 1회 적립 제한) ----------
+  function freeCapsuleKey(){ return 'freeCapsuleDraws'; }
+  function shareRewardDateKey(){ return 'freeCapsuleRewardDate'; }
+
+  function getFreeCapsuleCount(){
+    try{
+      const raw = window.localStorage.getItem(freeCapsuleKey());
+      return raw ? (parseInt(raw, 10) || 0) : 0;
+    }catch(e){ return 0; }
+  }
+
+  function setFreeCapsuleCount(n){
+    try{ window.localStorage.setItem(freeCapsuleKey(), String(Math.max(0, n))); }catch(e){ /* ignore */ }
+  }
+
+  function updateFreeCapsuleUI(){
+    const n = getFreeCapsuleCount();
+    const pairs = [
+      [document.getElementById('freeDrawNote'), document.getElementById('capsuleBtnPrice')],
+      [document.getElementById('tarotFreeDrawNote'), document.getElementById('tarotBtnPrice')]
+    ];
+    pairs.forEach(([note, btnPrice])=>{
+      if(!note || !btnPrice) return;
+      if(n > 0){
+        note.hidden = false;
+        note.textContent = `무료 뽑기 ${n}회 남음`;
+        btnPrice.textContent = '무료';
+      }else{
+        note.hidden = true;
+        btnPrice.textContent = '₩500';
+      }
+    });
+  }
+
+  function hasRewardedShareToday(){
+    try{
+      const today = new Date().toISOString().slice(0,10);
+      return window.localStorage.getItem(shareRewardDateKey()) === today;
+    }catch(e){ return false; }
+  }
+
+  function markShareRewardedToday(){
+    try{
+      const today = new Date().toISOString().slice(0,10);
+      window.localStorage.setItem(shareRewardDateKey(), today);
+    }catch(e){ /* ignore */ }
+  }
+
+  function grantFreeCapsuleForShare(){
+    if(hasRewardedShareToday()) return false; // 하루 1회만 적립
+    setFreeCapsuleCount(getFreeCapsuleCount() + 1);
+    markShareRewardedToday();
+    updateFreeCapsuleUI();
+    return true;
   }
 
   function showCapsuleShareStatus(msg){
@@ -1685,19 +2194,27 @@
   document.getElementById('capsuleShareBtn').addEventListener('click', async ()=>{
     const text = buildCapsuleShareText();
     if(!text) return;
+    let shared = false;
     if(navigator.share){
       try{
         await navigator.share({ title: '캡슐운세', text: text });
+        shared = true;
       }catch(e){
         // user cancelled share sheet
       }
     }else{
       try{
         await navigator.clipboard.writeText(text);
-        showCapsuleShareStatus('운세 내용이 복사되었습니다. 원하는 곳에 붙여넣어 공유해 보세요.');
+        shared = true;
       }catch(e){
         showCapsuleShareStatus('복사에 실패했습니다. 직접 선택해서 복사해 주세요.');
       }
+    }
+    if(shared){
+      const rewarded = grantFreeCapsuleForShare();
+      showCapsuleShareStatus(rewarded
+        ? '공유 감사해요! 무료 뽑기 1회가 적립됐어요.'
+        : '운세 내용이 복사(또는 공유)되었습니다. (무료 뽑기 적립은 하루 1회예요)');
     }
   });
 
@@ -1717,16 +2234,7 @@
         scale: 2
       });
       canvas.toBlob((blob)=>{
-        if(!blob){ showCapsuleShareStatus('이미지 생성에 실패했습니다.'); return; }
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `캡슐운세_${(currentCapsule && currentCapsule.rank) || 'fortune'}.png`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-        showCapsuleShareStatus('이미지가 저장되었습니다.');
+        saveOrOpenBlob(blob, `캡슐운세_${(currentCapsule && currentCapsule.rank) || 'fortune'}.png`, showCapsuleShareStatus);
       }, 'image/png');
     }catch(err){
       console.error(err);
@@ -1783,7 +2291,237 @@
   }
   setupPolicyModal('openPrivacyBtn', 'closePrivacyBtn', 'privacyOverlay');
   setupPolicyModal('openTermsBtn', 'closeTermsBtn', 'termsOverlay');
+
+  // ---------- 타로카드 (메이저 아르카나 22장) ----------
+  // 메이저 아르카나 22장의 공통 정보(카드가 상징하는 근본 의미 + 카드 이미지에 쓰일 한자 모티프)
+  const MAJOR_ARCANA_INFO = [
+    { roman:'0',    hanja:'始', meaning:'이 카드는 두려움 없이 내딛는 새로운 시작을 상징해요.' },
+    { roman:'I',    hanja:'術', meaning:'이 카드는 가진 능력을 발휘해 원하는 걸 만들어내는 힘을 상징해요.' },
+    { roman:'II',   hanja:'密', meaning:'이 카드는 겉으로 드러나지 않는 직관과 내면의 지혜를 상징해요.' },
+    { roman:'III',  hanja:'豊', meaning:'이 카드는 애쓰지 않아도 자연스럽게 채워지는 풍요를 상징해요.' },
+    { roman:'IV',   hanja:'定', meaning:'이 카드는 흔들리지 않는 기준과 안정된 구조를 상징해요.' },
+    { roman:'V',    hanja:'智', meaning:'이 카드는 경험에서 우러나오는 지혜와 배움을 상징해요.' },
+    { roman:'VI',   hanja:'緣', meaning:'이 카드는 마음이 이끄는 선택과 깊은 인연을 상징해요.' },
+    { roman:'VII',  hanja:'進', meaning:'이 카드는 방향을 정하고 힘차게 나아가는 추진력을 상징해요.' },
+    { roman:'VIII', hanja:'忍', meaning:'이 카드는 부드럽지만 단단한 인내와 다정한 힘을 상징해요.' },
+    { roman:'IX',   hanja:'省', meaning:'이 카드는 홀로 머무는 시간 속에서 찾아오는 성찰을 상징해요.' },
+    { roman:'X',    hanja:'轉', meaning:'이 카드는 자연스럽게 흘러가는 삶의 전환점을 상징해요.' },
+    { roman:'XI',   hanja:'衡', meaning:'이 카드는 솔직함에서 비롯되는 균형과 공정함을 상징해요.' },
+    { roman:'XII',  hanja:'觀', meaning:'이 카드는 멈춰 있는 시간이 만들어주는 새로운 시각을 상징해요.' },
+    { roman:'XIII', hanja:'終', meaning:'이 카드는 두려운 끝이 아니라 홀가분한 마무리와 새 시작을 상징해요.' },
+    { roman:'XIV',  hanja:'和', meaning:'이 카드는 서두르지 않고 맞춰가는 균형과 조화를 상징해요.' },
+    { roman:'XV',   hanja:'覺', meaning:'이 카드는 스스로를 옭아매던 것을 알아차리는 순간을 상징해요.' },
+    { roman:'XVI',  hanja:'變', meaning:'이 카드는 갑작스럽지만 결국 더 단단하게 만드는 변화를 상징해요.' },
+    { roman:'XVII', hanja:'希', meaning:'이 카드는 애쓴 만큼 이루어지는 조용한 희망을 상징해요.' },
+    { roman:'XVIII',hanja:'感', meaning:'이 카드는 선명하지 않아도 나아가게 하는 직감을 상징해요.' },
+    { roman:'XIX',  hanja:'陽', meaning:'이 카드는 있는 그대로 빛나는 밝은 기운을 상징해요.' },
+    { roman:'XX',   hanja:'醒', meaning:'이 카드는 지난 시간을 돌아보고 다시 일어서는 재출발을 상징해요.' },
+    { roman:'XXI',  hanja:'成', meaning:'이 카드는 하나의 흐름이 잘 마무리된 완성을 상징해요.' }
+  ];
+
+  const TAROT_CARDS = [
+    { major:0, reversed:false, name:'0. 광대 (정방향)', text:'낯선 시작 앞에서도 겁내지 않아도 괜찮은 때입니다. 계획이 완벽하지 않아도 일단 발을 내딛는 쪽이 결국 더 많은 걸 보여줄 거예요. 오늘의 서투름은 내일의 자산이 됩니다.', keyword:'키워드 · 새로운 시작' },
+    { major:0, reversed:true, name:'0. 광대 (역방향)', text:'조금 더 신중해도 괜찮은 때입니다. 마음만 앞서서 놓치는 부분은 없는지 한 번 더 살펴보세요. 서두르지 않는다고 뒤처지는 건 아닙니다.', keyword:'키워드 · 재정비' },
+    { major:1, reversed:false, name:'1. 마법사 (정방향)', text:'지금 가진 것만으로도 충분히 원하는 걸 만들어낼 수 있는 때입니다. 재료는 이미 손안에 있으니, 자신 있게 움직여보세요. 준비는 이미 끝났습니다.', keyword:'키워드 · 실행력' },
+    { major:1, reversed:true, name:'1. 마법사 (역방향)', text:'가진 능력을 스스로 과소평가하고 있진 않은지 돌아볼 때입니다. 힘을 아끼기보다 조금씩 꺼내 써보세요. 생각보다 잘 해내고 있어요.', keyword:'키워드 · 자기 신뢰' },
+    { major:2, reversed:false, name:'2. 여사제 (정방향)', text:'답을 서둘러 밖에서 찾기보다, 조용히 안을 들여다보는 게 도움이 되는 때입니다. 직감이 말하는 걸 흘려듣지 마세요. 침묵 속에 이미 힌트가 있습니다.', keyword:'키워드 · 직관' },
+    { major:2, reversed:true, name:'2. 여사제 (역방향)', text:'너무 많은 생각이 오히려 판단을 흐리게 하는 때입니다. 답을 억지로 끄집어내려 하지 말고 잠시 내려두세요. 시간이 흐르면 자연히 선명해집니다.', keyword:'키워드 · 여백' },
+    { major:3, reversed:false, name:'3. 여황제 (정방향)', text:'애쓰지 않아도 자연스럽게 풍성해지는 흐름 속에 있습니다. 주변을 살뜰히 돌보는 마음이 좋은 결과로 돌아올 거예요. 여유를 가져도 괜찮은 때입니다.', keyword:'키워드 · 풍요' },
+    { major:3, reversed:true, name:'3. 여황제 (역방향)', text:'스스로를 돌보는 일을 뒤로 미루고 있진 않은지 살펴보세요. 남을 챙기는 만큼 자신에게도 다정해질 필요가 있습니다. 오늘은 나를 위한 여유를 조금 남겨두세요.', keyword:'키워드 · 자기 돌봄' },
+    { major:4, reversed:false, name:'4. 황제 (정방향)', text:'흔들리지 않는 원칙이 지금은 든든한 힘이 되어줍니다. 스스로 정한 기준을 믿고 밀고 나가도 괜찮습니다. 구조를 세우는 노력이 곧 안정으로 이어질 거예요.', keyword:'키워드 · 안정' },
+    { major:4, reversed:true, name:'4. 황제 (역방향)', text:'너무 꽉 쥐고 있던 계획을 살짝 풀어줘도 좋은 때입니다. 모든 걸 통제하려 하지 않아도 흐름은 제자리를 찾아갑니다. 유연함도 하나의 힘이에요.', keyword:'키워드 · 유연함' },
+    { major:5, reversed:false, name:'5. 교황 (정방향)', text:'경험 많은 사람의 조언 한마디가 지금 큰 도움이 될 수 있습니다. 혼자 끙끙대지 말고 물어보세요. 배우려는 마음이 좋은 길을 열어줄 거예요.', keyword:'키워드 · 지혜' },
+    { major:5, reversed:true, name:'5. 교황 (역방향)', text:'남의 기준보다 나만의 방식이 더 맞는 순간일 수 있습니다. 관습이나 정해진 틀에 너무 얽매이지 않아도 괜찮아요. 스스로의 답을 믿어보세요.', keyword:'키워드 · 나만의 길' },
+    { major:6, reversed:false, name:'6. 연인 (정방향)', text:'마음이 이끄는 선택이 곧 옳은 선택일 가능성이 큰 때입니다. 두 갈래 길 앞이라면 진심에 더 귀 기울여보세요. 관계에서도 솔직함이 좋은 결과를 만듭니다.', keyword:'키워드 · 선택' },
+    { major:6, reversed:true, name:'6. 연인 (역방향)', text:'결정을 조금 미뤄두어도 괜찮은 때입니다. 마음이 여러 갈래일수록 억지로 하나를 고르려 애쓰지 마세요. 시간을 두면 더 편안한 선택이 보입니다.', keyword:'키워드 · 숙고' },
+    { major:7, reversed:false, name:'7. 전차 (정방향)', text:'방향만 확실하다면 지금은 속도를 붙여도 좋은 때입니다. 망설임을 뒤로하고 앞으로 나아가 보세요. 흐름이 당신의 추진력을 뒷받침해줄 거예요.', keyword:'키워드 · 추진력' },
+    { major:7, reversed:true, name:'7. 전차 (역방향)', text:'속도보다 방향을 다시 점검할 필요가 있는 때입니다. 잠시 멈춰서 지금 가는 길이 맞는지 확인해보세요. 방향만 바로잡으면 다시 잘 나아갈 수 있어요.', keyword:'키워드 · 방향 점검' },
+    { major:8, reversed:false, name:'8. 힘 (정방향)', text:'거칠게 밀어붙이기보다 부드럽게 다독이는 쪽이 더 큰 힘을 발휘하는 때입니다. 스스로에게도 그렇게 대해주세요. 다정함이 결국 가장 강한 무기가 됩니다.', keyword:'키워드 · 인내' },
+    { major:8, reversed:true, name:'8. 힘 (역방향)', text:'자신감이 잠시 옅어진 것뿐, 힘이 사라진 건 아닙니다. 작은 성공부터 차곡차곡 쌓아보세요. 그 과정에서 다시 단단해질 거예요.', keyword:'키워드 · 회복' },
+    { major:9, reversed:false, name:'9. 은둔자 (정방향)', text:'잠시 혼자만의 시간을 갖는 게 오히려 앞으로 나아가는 데 도움이 되는 때입니다. 조급해하지 않아도 괜찮아요. 고요함 속에서 답이 정리될 거예요.', keyword:'키워드 · 성찰' },
+    { major:9, reversed:true, name:'9. 은둔자 (역방향)', text:'혼자 짊어지기보다 곁에 있는 사람에게 마음을 열어도 좋은 때입니다. 고립되지 않아도 괜찮습니다. 기대는 것도 용기예요.', keyword:'키워드 · 연결' },
+    { major:10, reversed:false, name:'10. 운명의 수레바퀴 (정방향)', text:'흐름이 자연스럽게 바뀌는 시점에 서 있습니다. 억지로 붙잡기보다 변화를 편하게 받아들여보세요. 지금의 전환이 더 나은 다음으로 이어질 거예요.', keyword:'키워드 · 전환점' },
+    { major:10, reversed:true, name:'10. 운명의 수레바퀴 (역방향)', text:'변화가 더디게 느껴져도 조바심 내지 않아도 됩니다. 흐름은 눈에 보이지 않게도 움직이고 있어요. 지금은 그 속도를 믿고 기다려도 괜찮은 때입니다.', keyword:'키워드 · 기다림' },
+    { major:11, reversed:false, name:'11. 정의 (정방향)', text:'솔직하고 공정한 태도가 결국 가장 좋은 결과로 이어지는 때입니다. 지금의 선택에 떳떳해도 괜찮습니다. 균형 잡힌 판단이 신뢰를 만들어줄 거예요.', keyword:'키워드 · 균형' },
+    { major:11, reversed:true, name:'11. 정의 (역방향)', text:'스스로에게 너무 엄격한 잣대를 들이대고 있진 않은지 살펴보세요. 완벽한 공정함보다 마음의 평온이 먼저일 때도 있습니다. 조금은 너그러워져도 괜찮아요.', keyword:'키워드 · 너그러움' },
+    { major:12, reversed:false, name:'12. 매달린 사람 (정방향)', text:'당장 결과가 안 보여도 지금의 멈춤이 헛되지 않습니다. 관점을 바꿔보면 다른 길이 보일 수도 있어요. 잠시 멈춰 있는 시간도 앞으로 나아가는 과정입니다.', keyword:'키워드 · 새로운 시각' },
+    { major:12, reversed:true, name:'12. 매달린 사람 (역방향)', text:'너무 오래 미뤄둔 결정이 있다면, 이제는 한 걸음 내디뎌도 좋은 때입니다. 기다림의 시간은 충분했어요. 스스로를 믿고 움직여보세요.', keyword:'키워드 · 다시 움직임' },
+    { major:13, reversed:false, name:'13. 죽음 (정방향)', text:'끝이라기보다 하나의 매듭을 짓는 때에 가깝습니다. 미련 없이 정리하고 나면 오히려 홀가분해질 거예요. 새로운 흐름이 그 자리를 채워줄 겁니다.', keyword:'키워드 · 마무리와 시작' },
+    { major:13, reversed:true, name:'13. 죽음 (역방향)', text:'변화를 받아들이기까지 시간이 조금 더 필요한 때일 수 있습니다. 억지로 서두르지 않아도 괜찮아요. 마음의 준비가 되었을 때 자연스럽게 넘어가면 됩니다.', keyword:'키워드 · 마음의 속도' },
+    { major:14, reversed:false, name:'14. 절제 (정방향)', text:'서두르지 않고 균형을 맞춰가는 태도가 지금은 가장 필요합니다. 조금씩, 꾸준히가 답이 되는 시기예요. 균형 잡힌 하루가 좋은 결과로 이어질 거예요.', keyword:'키워드 · 조화' },
+    { major:14, reversed:true, name:'14. 절제 (역방향)', text:'한쪽으로 조금 치우쳐 있는 균형을 다시 맞춰볼 때입니다. 무리하고 있던 부분이 있다면 힘을 조금 빼도 괜찮아요. 다시 중심을 찾으면 편안해질 거예요.', keyword:'키워드 · 재조정' },
+    { major:15, reversed:false, name:'15. 악마 (정방향)', text:'스스로를 옭아매던 습관이나 생각이 있다면, 그걸 알아차리는 것만으로도 절반은 풀린 셈입니다. 오늘은 그 매듭을 가볍게 바라봐도 좋습니다.', keyword:'키워드 · 알아차림' },
+    { major:15, reversed:true, name:'15. 악마 (역방향)', text:'오랫동안 스스로를 묶어두던 것에서 벗어날 준비가 된 때입니다. 작은 결심 하나가 큰 변화의 시작이 될 수 있어요. 그 첫걸음을 스스로에게 허락해주세요.', keyword:'키워드 · 해방' },
+    { major:16, reversed:false, name:'16. 탑 (정방향)', text:'예상 밖의 변화가 당장은 당황스러울 수 있지만, 지나고 보면 더 단단해지는 계기가 될 거예요. 흔들림 뒤엔 더 튼튼한 기반이 남습니다.', keyword:'키워드 · 전환' },
+    { major:16, reversed:true, name:'16. 탑 (역방향)', text:'큰 변화보다 작은 조정만으로도 충분한 때입니다. 이미 지나온 흔들림이 있었다면, 지금은 그 여파를 차분히 정리하는 시간으로 삼아보세요.', keyword:'키워드 · 수습' },
+    { major:17, reversed:false, name:'17. 별 (정방향)', text:'지금은 조용히 희망을 품고 있어도 되는 때입니다. 애쓴 만큼 좋은 방향으로 흘러가고 있어요. 스스로에 대한 믿음을 거두지 마세요.', keyword:'키워드 · 희망' },
+    { major:17, reversed:true, name:'17. 별 (역방향)', text:'잠시 흐릿해진 희망이라도 완전히 사라진 건 아닙니다. 작은 것에서부터 다시 빛을 찾아보세요. 조급해하지 않아도 다시 밝아질 거예요.', keyword:'키워드 · 다시 찾는 빛' },
+    { major:18, reversed:false, name:'18. 달 (정방향)', text:'모든 게 선명하지 않아도 괜찮습니다. 불확실함 속에서도 한 걸음씩 나아가면 길이 보일 거예요. 직감을 따라가는 것만으로도 충분한 때입니다.', keyword:'키워드 · 직감' },
+    { major:18, reversed:true, name:'18. 달 (역방향)', text:'막연한 불안이 있다면, 그 실체를 한번 차분히 들여다볼 때입니다. 생각보다 별일 아닌 경우가 많아요. 안개는 곧 걷힐 거예요.', keyword:'키워드 · 안심' },
+    { major:19, reversed:false, name:'19. 태양 (정방향)', text:'애쓴 것들이 밝게 드러나는 때입니다. 자신 있게 스스로를 드러내도 좋은 시기예요. 오늘 하루는 있는 그대로도 충분히 빛납니다.', keyword:'키워드 · 밝은 기운' },
+    { major:19, reversed:true, name:'19. 태양 (역방향)', text:'기쁨이 잠시 옅어졌더라도 곧 다시 밝아질 흐름입니다. 스스로를 너무 다그치지 마세요. 작은 즐거움부터 하나씩 되찾아가면 됩니다.', keyword:'키워드 · 소소한 기쁨' },
+    { major:20, reversed:false, name:'20. 심판 (정방향)', text:'지난 시간을 돌아보고 새로운 다짐을 세우기 좋은 때입니다. 스스로에게 새로운 기회를 줘보세요. 지금의 결심이 앞으로를 바꿔줄 거예요.', keyword:'키워드 · 재출발' },
+    { major:20, reversed:true, name:'20. 심판 (역방향)', text:'스스로를 평가하는 데 너무 가혹해지지 않아도 됩니다. 아직 정리되지 않은 마음이 있다면 천천히 풀어가도 괜찮아요. 때가 되면 자연히 정돈됩니다.', keyword:'키워드 · 자기 이해' },
+    { major:21, reversed:false, name:'21. 세계 (정방향)', text:'하나의 흐름이 잘 마무리되고, 다음 단계로 넘어갈 준비가 된 때입니다. 지금까지의 과정을 스스로 인정해주세요. 애쓴 만큼 좋은 결실이 따라옵니다.', keyword:'키워드 · 완성' },
+    { major:21, reversed:true, name:'21. 세계 (역방향)', text:'마무리까지 조금만 더 시간을 들이면 되는 때입니다. 거의 다 왔으니 마지막 힘을 아끼지 마세요. 완성은 생각보다 가까이 있습니다.', keyword:'키워드 · 막바지 힘' }
+  ];
+
+  const tarotSpread = document.getElementById('tarotSpread');
+  const tarotResult = document.getElementById('tarotResult');
+  const tarotResetWrap = document.getElementById('tarotResetWrap');
+  const tarotResetBtn = document.getElementById('tarotResetBtn');
+  let currentTarot = null;
+  let tarotPicked = false;
+
+  function shuffledTarotDeck(n){
+    const pool = TAROT_CARDS.slice();
+    for(let i = pool.length - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * (i + 1));
+      [pool[i], pool[j]] = [pool[j], pool[i]];
+    }
+    return pool.slice(0, n);
+  }
+
+  function renderTarotSpread(){
+    tarotPicked = false;
+    tarotResult.hidden = true;
+    tarotResetWrap.hidden = true;
+    document.getElementById('tarotStartWrap').hidden = true;
+    document.getElementById('tarotPriceTag').hidden = true;
+    document.getElementById('tarotFreeDrawNote').hidden = true;
+    document.getElementById('tarotPaymentNote').hidden = true;
+    tarotSpread.hidden = false;
+    tarotSpread.innerHTML = '';
+    const deck = shuffledTarotDeck(8);
+    deck.forEach((card) => {
+      const btn = document.createElement('button');
+      btn.className = 'tarot-pick';
+      btn.setAttribute('aria-label', '타로 카드 뽑기');
+      btn.addEventListener('click', () => pickTarotCard(btn, card));
+      tarotSpread.appendChild(btn);
+    });
+  }
+
+  function resetTarotToPaywall(){
+    tarotSpread.hidden = true;
+    tarotSpread.innerHTML = '';
+    tarotResult.hidden = true;
+    tarotResetWrap.hidden = true;
+    document.getElementById('tarotStartWrap').hidden = false;
+    document.getElementById('tarotPriceTag').hidden = false;
+    document.getElementById('tarotPaymentNote').hidden = false;
+    updateFreeCapsuleUI();
+  }
+
+  const tarotStartBtn = document.getElementById('tarotStartBtn');
+  tarotStartBtn.addEventListener('click', async () => {
+    if(tarotStartBtn.disabled) return;
+    const usedFreeDraw = getFreeCapsuleCount() > 0;
+
+    if(!usedFreeDraw){
+      tarotStartBtn.disabled = true;
+      const paid = await requestDrawPayment('타로카드 보기');
+      tarotStartBtn.disabled = false;
+      if(!paid) return;
+    }
+
+    if(usedFreeDraw){
+      setFreeCapsuleCount(getFreeCapsuleCount() - 1);
+      updateFreeCapsuleUI();
+    }
+    renderTarotSpread();
+  });
+
+  function pickTarotCard(btn, card){
+    if(tarotPicked) return;
+    tarotPicked = true;
+    currentTarot = card;
+
+    const allPicks = tarotSpread.querySelectorAll('.tarot-pick');
+    allPicks.forEach((el) => { if(el !== btn) el.disabled = true; });
+    btn.classList.add('chosen');
+    playFlipSound();
+    if(navigator.vibrate) navigator.vibrate(20);
+
+    setTimeout(() => {
+      tarotSpread.hidden = true;
+      tarotResetWrap.hidden = false;
+
+      const info = MAJOR_ARCANA_INFO[card.major] || {};
+      const faceEl = document.getElementById('tarotCardFace');
+      faceEl.classList.toggle('reversed', !!card.reversed);
+      document.getElementById('tarotCardNumeral').textContent = info.roman || '';
+      document.getElementById('tarotCardHanja').textContent = info.hanja || '';
+      document.getElementById('tarotCardOrient').textContent = card.reversed ? '역방향' : '정방향';
+      document.getElementById('tarotCardMeaning').textContent = info.meaning || '';
+      document.getElementById('tarotCardName').textContent = card.name;
+      document.getElementById('tarotCardText').textContent = card.text;
+      document.getElementById('tarotCardKeyword').textContent = card.keyword;
+      tarotResult.hidden = false;
+    }, 480);
+  }
+
+  tarotResetBtn.addEventListener('click', resetTarotToPaywall);
+
+  function buildTarotShareText(){
+    if(!currentTarot) return '';
+    const info = MAJOR_ARCANA_INFO[currentTarot.major] || {};
+    const meaningLine = info.meaning ? `${info.meaning}\n\n` : '';
+    return `[타로카드] ${currentTarot.name}\n\n${meaningLine}${currentTarot.text}\n\n${currentTarot.keyword}\n\n오늘의 운세 보러가기: https://myfortunetoday.com`;
+  }
+
+  function showTarotShareStatus(msg){
+    const el = document.getElementById('tarotShareStatus');
+    el.textContent = msg;
+    setTimeout(()=>{ if(el.textContent === msg) el.textContent = ''; }, 2500);
+  }
+
+  document.getElementById('tarotShareBtn').addEventListener('click', async ()=>{
+    const text = buildTarotShareText();
+    if(!text) return;
+    let shared = false;
+    if(navigator.share){
+      try{ await navigator.share({ title: '타로카드', text: text }); shared = true; }
+      catch(e){ /* user cancelled */ }
+    }else{
+      try{ await navigator.clipboard.writeText(text); shared = true; }
+      catch(e){ showTarotShareStatus('복사에 실패했습니다. 직접 선택해서 복사해 주세요.'); }
+    }
+    if(shared){
+      const rewarded = grantFreeCapsuleForShare();
+      showTarotShareStatus(rewarded
+        ? '공유 감사해요! 무료 뽑기 1회가 적립됐어요.'
+        : '운세 내용이 복사(또는 공유)되었습니다. (무료 뽑기 적립은 하루 1회예요)');
+    }
+  });
+
+  document.getElementById('tarotSaveImgBtn').addEventListener('click', async (e)=>{
+    const btn = e.currentTarget;
+    if(typeof html2canvas === 'undefined'){
+      showTarotShareStatus('이미지 저장 기능을 불러오지 못했습니다.');
+      return;
+    }
+    btn.disabled = true;
+    const prevText = btn.querySelector('span').textContent;
+    btn.querySelector('span').textContent = '만드는 중...';
+    try{
+      const target = document.getElementById('tarotSlip');
+      const canvas = await html2canvas(target, { backgroundColor: '#EFE7D4', scale: 2 });
+      canvas.toBlob((blob)=>{
+        saveOrOpenBlob(blob, `타로카드_${(currentTarot && currentTarot.name) || 'tarot'}.png`, showTarotShareStatus);
+      }, 'image/png');
+    }catch(err){
+      console.error(err);
+      showTarotShareStatus('이미지 저장 중 문제가 생겼습니다.');
+    }finally{
+      btn.disabled = false;
+      btn.querySelector('span').textContent = prevText;
+    }
+  });
 </script>
+
+<!-- Vercel Web Analytics: Vercel 프로젝트 대시보드 > Analytics 탭에서 활성화해야 데이터가 쌓입니다 -->
+<script defer src="/_vercel/insights/script.js"></script>
 
 </body>
 </html>
