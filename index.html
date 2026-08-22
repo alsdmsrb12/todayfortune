@@ -863,6 +863,77 @@
     100%{ transform: scale(1.08) rotateY(0); opacity:0; }
   }
 
+  /* ---------- 정적 소개/안내 콘텐츠 (탭 조작 없이도 보이는 콘텐츠) ---------- */
+  .info-section{
+    margin-top: 64px;
+    padding-top: 40px;
+    border-top: 1px dashed var(--hanji-edge);
+  }
+  .info-title{
+    font-family:'Nanum Myeongjo', serif;
+    font-size: 20px;
+    font-weight:800;
+    color: var(--ink);
+    margin: 0 0 14px;
+  }
+  .info-section + .info-section{ margin-top: 40px; padding-top: 32px; }
+  .info-text{
+    font-size: 14.5px;
+    line-height:1.8;
+    color: var(--ink-soft);
+    margin: 0 0 12px;
+  }
+  .tarot-guide-grid{
+    display:grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-top: 20px;
+  }
+  @media (max-width: 480px){
+    .tarot-guide-grid{ grid-template-columns: 1fr; }
+  }
+  .tarot-guide-item{
+    border: 1px solid var(--hanji-edge);
+    border-radius: 10px;
+    padding: 14px 16px;
+    background: rgba(255,253,246,0.4);
+  }
+  .tarot-guide-head{
+    display:flex; align-items:baseline; gap:8px;
+    margin-bottom:6px;
+  }
+  .tarot-guide-num{
+    font-family:'Nanum Myeongjo', serif;
+    font-weight:800;
+    color: var(--indigo);
+    font-size:15px;
+  }
+  .tarot-guide-name{
+    font-weight:700;
+    font-size:14.5px;
+    color: var(--ink);
+  }
+  .tarot-guide-meaning{
+    font-size:13px;
+    line-height:1.6;
+    color: var(--ink-faint);
+    margin:0;
+  }
+  .faq-item{ margin-bottom:18px; }
+  .faq-item:last-child{ margin-bottom:0; }
+  .faq-q{
+    font-weight:700;
+    font-size:14.5px;
+    color: var(--ink);
+    margin:0 0 6px;
+  }
+  .faq-a{
+    font-size:13.5px;
+    line-height:1.75;
+    color: var(--ink-soft);
+    margin:0;
+  }
+
   .cross-promo{
     display:flex; align-items:center; justify-content:center; gap:10px;
     max-width: 420px; margin: 40px auto 0;
@@ -1298,6 +1369,61 @@
     </div>
 
   </div><!-- /panelTarot -->
+
+  <section class="info-section">
+    <h2 class="info-title">오늘의 운세, 이렇게 봐요</h2>
+    <p class="info-text">
+      오늘의 운세는 이름과 생년월일을 바탕으로 하루의 기운을 짚어드리는 사주 콘텐츠예요. 같은 이름과 생년월일로 다시 조회하면 그날의 결과를 그대로 다시 볼 수 있고, 매일 자정이 지나면 새로운 하루의 기운으로 갱신됩니다.
+    </p>
+    <p class="info-text">
+      캡슐 뽑기는 짧은 한 줄 문구로 오늘의 분위기를 가볍게 확인하는 콘텐츠이고, 타로카드는 메이저 아르카나 22장 중 한 장을 뽑아 그 카드가 상징하는 의미와 오늘의 메시지를 함께 보여드려요. 두 콘텐츠 모두 건당 500원이며, 결과를 공유하면 하루 1회 무료 뽑기가 적립됩니다.
+    </p>
+  </section>
+
+  <section class="info-section">
+    <h2 class="info-title">타로카드 메이저 아르카나 22장의 상징</h2>
+    <p class="info-text">타로카드에서 뽑을 수 있는 메이저 아르카나 22장과 각 카드가 담고 있는 상징적인 의미를 미리 살펴보세요. 실제로 카드를 뽑으면 정방향/역방향에 따라 오늘에 맞춘 조금 더 구체적인 메시지를 받아보실 수 있어요.</p>
+    <div class="tarot-guide-grid">
+      <div class="tarot-guide-item"><div class="tarot-guide-head"><span class="tarot-guide-num">0</span><span class="tarot-guide-name">광대</span></div><p class="tarot-guide-meaning">이 카드는 두려움 없이 내딛는 새로운 시작을 상징해요.</p></div>
+      <div class="tarot-guide-item"><div class="tarot-guide-head"><span class="tarot-guide-num">I</span><span class="tarot-guide-name">마법사</span></div><p class="tarot-guide-meaning">이 카드는 가진 능력을 발휘해 원하는 걸 만들어내는 힘을 상징해요.</p></div>
+      <div class="tarot-guide-item"><div class="tarot-guide-head"><span class="tarot-guide-num">II</span><span class="tarot-guide-name">여사제</span></div><p class="tarot-guide-meaning">이 카드는 겉으로 드러나지 않는 직관과 내면의 지혜를 상징해요.</p></div>
+      <div class="tarot-guide-item"><div class="tarot-guide-head"><span class="tarot-guide-num">III</span><span class="tarot-guide-name">여황제</span></div><p class="tarot-guide-meaning">이 카드는 애쓰지 않아도 자연스럽게 채워지는 풍요를 상징해요.</p></div>
+      <div class="tarot-guide-item"><div class="tarot-guide-head"><span class="tarot-guide-num">IV</span><span class="tarot-guide-name">황제</span></div><p class="tarot-guide-meaning">이 카드는 흔들리지 않는 기준과 안정된 구조를 상징해요.</p></div>
+      <div class="tarot-guide-item"><div class="tarot-guide-head"><span class="tarot-guide-num">V</span><span class="tarot-guide-name">교황</span></div><p class="tarot-guide-meaning">이 카드는 경험에서 우러나오는 지혜와 배움을 상징해요.</p></div>
+      <div class="tarot-guide-item"><div class="tarot-guide-head"><span class="tarot-guide-num">VI</span><span class="tarot-guide-name">연인</span></div><p class="tarot-guide-meaning">이 카드는 마음이 이끄는 선택과 깊은 인연을 상징해요.</p></div>
+      <div class="tarot-guide-item"><div class="tarot-guide-head"><span class="tarot-guide-num">VII</span><span class="tarot-guide-name">전차</span></div><p class="tarot-guide-meaning">이 카드는 방향을 정하고 힘차게 나아가는 추진력을 상징해요.</p></div>
+      <div class="tarot-guide-item"><div class="tarot-guide-head"><span class="tarot-guide-num">VIII</span><span class="tarot-guide-name">힘</span></div><p class="tarot-guide-meaning">이 카드는 부드럽지만 단단한 인내와 다정한 힘을 상징해요.</p></div>
+      <div class="tarot-guide-item"><div class="tarot-guide-head"><span class="tarot-guide-num">IX</span><span class="tarot-guide-name">은둔자</span></div><p class="tarot-guide-meaning">이 카드는 홀로 머무는 시간 속에서 찾아오는 성찰을 상징해요.</p></div>
+      <div class="tarot-guide-item"><div class="tarot-guide-head"><span class="tarot-guide-num">X</span><span class="tarot-guide-name">운명의 수레바퀴</span></div><p class="tarot-guide-meaning">이 카드는 자연스럽게 흘러가는 삶의 전환점을 상징해요.</p></div>
+      <div class="tarot-guide-item"><div class="tarot-guide-head"><span class="tarot-guide-num">XI</span><span class="tarot-guide-name">정의</span></div><p class="tarot-guide-meaning">이 카드는 솔직함에서 비롯되는 균형과 공정함을 상징해요.</p></div>
+      <div class="tarot-guide-item"><div class="tarot-guide-head"><span class="tarot-guide-num">XII</span><span class="tarot-guide-name">매달린 사람</span></div><p class="tarot-guide-meaning">이 카드는 멈춰 있는 시간이 만들어주는 새로운 시각을 상징해요.</p></div>
+      <div class="tarot-guide-item"><div class="tarot-guide-head"><span class="tarot-guide-num">XIII</span><span class="tarot-guide-name">죽음</span></div><p class="tarot-guide-meaning">이 카드는 두려운 끝이 아니라 홀가분한 마무리와 새 시작을 상징해요.</p></div>
+      <div class="tarot-guide-item"><div class="tarot-guide-head"><span class="tarot-guide-num">XIV</span><span class="tarot-guide-name">절제</span></div><p class="tarot-guide-meaning">이 카드는 서두르지 않고 맞춰가는 균형과 조화를 상징해요.</p></div>
+      <div class="tarot-guide-item"><div class="tarot-guide-head"><span class="tarot-guide-num">XV</span><span class="tarot-guide-name">악마</span></div><p class="tarot-guide-meaning">이 카드는 스스로를 옭아매던 것을 알아차리는 순간을 상징해요.</p></div>
+      <div class="tarot-guide-item"><div class="tarot-guide-head"><span class="tarot-guide-num">XVI</span><span class="tarot-guide-name">탑</span></div><p class="tarot-guide-meaning">이 카드는 갑작스럽지만 결국 더 단단하게 만드는 변화를 상징해요.</p></div>
+      <div class="tarot-guide-item"><div class="tarot-guide-head"><span class="tarot-guide-num">XVII</span><span class="tarot-guide-name">별</span></div><p class="tarot-guide-meaning">이 카드는 애쓴 만큼 이루어지는 조용한 희망을 상징해요.</p></div>
+      <div class="tarot-guide-item"><div class="tarot-guide-head"><span class="tarot-guide-num">XVIII</span><span class="tarot-guide-name">달</span></div><p class="tarot-guide-meaning">이 카드는 선명하지 않아도 나아가게 하는 직감을 상징해요.</p></div>
+      <div class="tarot-guide-item"><div class="tarot-guide-head"><span class="tarot-guide-num">XIX</span><span class="tarot-guide-name">태양</span></div><p class="tarot-guide-meaning">이 카드는 있는 그대로 빛나는 밝은 기운을 상징해요.</p></div>
+      <div class="tarot-guide-item"><div class="tarot-guide-head"><span class="tarot-guide-num">XX</span><span class="tarot-guide-name">심판</span></div><p class="tarot-guide-meaning">이 카드는 지난 시간을 돌아보고 다시 일어서는 재출발을 상징해요.</p></div>
+      <div class="tarot-guide-item"><div class="tarot-guide-head"><span class="tarot-guide-num">XXI</span><span class="tarot-guide-name">세계</span></div><p class="tarot-guide-meaning">이 카드는 하나의 흐름이 잘 마무리된 완성을 상징해요.</p></div>
+    </div>
+  </section>
+
+  <section class="info-section">
+    <h2 class="info-title">자주 묻는 질문</h2>
+    <div class="faq-item">
+      <p class="faq-q">Q. 캡슐 뽑기와 타로카드는 어떻게 다른가요?</p>
+      <p class="faq-a">A. 캡슐 뽑기는 랜덤 문구 한 줄을, 타로카드는 카드 한 장과 그 상징 의미, 오늘의 메시지를 함께 보여드려요. 둘 다 500원이며 하루에 원하는 만큼 이용할 수 있습니다.</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">Q. 무료로 볼 수 있는 방법도 있나요?</p>
+      <p class="faq-a">A. 이름으로 보는 오늘의 운세는 하루 2회까지 무료로 이용할 수 있어요. 캡슐 뽑기·타로카드는 결과를 공유하면 하루 1회 무료 뽑기가 적립됩니다.</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">Q. 환불이 가능한가요?</p>
+      <p class="faq-a">A. 결제 즉시 콘텐츠가 제공되는 디지털 상품 특성상 원칙적으로 청약철회가 제한되지만, 시스템 오류로 콘텐츠가 제공되지 않은 경우 등은 환불해드립니다. 자세한 내용은 하단 이용약관을 확인해주세요.</p>
+    </div>
+  </section>
 
   <a class="cross-promo" href="/job-test/">
     <span class="cross-promo-badge">직업 테스트</span>
